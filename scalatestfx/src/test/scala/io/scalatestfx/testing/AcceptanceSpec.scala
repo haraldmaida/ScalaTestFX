@@ -13,9 +13,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.scalatestfx.testbase
+package io.scalatestfx.testing
 
 import org.scalatest.FlatSpec
 import org.scalatest.Matchers
 
-abstract class UnitSpec extends FlatSpec with Matchers
+abstract class AcceptanceSpec extends FlatSpec with Matchers

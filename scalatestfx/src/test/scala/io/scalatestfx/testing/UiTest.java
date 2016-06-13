@@ -13,9 +13,17 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.scalatestfx.testbase
+package io.scalatestfx.testing;
 
-import org.scalatest.FlatSpec
-import org.scalatest.Matchers
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-abstract class AcceptanceSpec extends FlatSpec with Matchers
+import org.scalatest.TagAnnotation;
+
+import java.lang.annotation.ElementType;
+
+@TagAnnotation
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD, ElementType.TYPE})
+public @interface UiTest {}

@@ -16,11 +16,12 @@
 package io.scalatestfx.cases.acceptance
 
 import scala.concurrent.duration._
-import io.scalatestfx.testbase.AcceptanceSpec
 import io.scalatestfx.api.SfxRobot
+import io.scalatestfx.api.ViewObject
 import io.scalatestfx.framework.scalatest.JFXAppFixture
-import scalafx.application.JFXApp.PrimaryStage
+import io.scalatestfx.testing.AcceptanceSpec
 import scalafx.application.JFXApp
+import scalafx.application.JFXApp.PrimaryStage
 import scalafx.scene.Scene
 import scalafx.scene.layout.StackPane
 import scalafx.scene.control.Button
@@ -29,10 +30,15 @@ import scalafx.Includes._
 import org.testfx.api.FxAssert.verifyThat
 import org.testfx.matcher.base.NodeMatchers.hasText
 import org.testfx.util.NodeQueryUtils._
+import io.scalatestfx.testing.UiTest
 
-class JFXAppStartSpec extends AcceptanceSpec with SfxRobot with JFXAppFixture {
+@UiTest
+class JFXAppStartSpec extends AcceptanceSpec
+    with SfxRobot
+    with JFXAppFixture
+  {
 
-  override lazy val stage: PrimaryStage = new JFXApp.PrimaryStage {
+  override lazy val stage: PrimaryStage = new JFXApp.PrimaryStage with ViewObject {
     title = "Hallo World!"
     width = 200
     height = 200

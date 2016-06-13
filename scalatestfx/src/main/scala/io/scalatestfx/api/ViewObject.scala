@@ -13,14 +13,14 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.scalatestfx.framework.scalatest
+package io.scalatestfx.api
 
 /**
  * Trait that facilitates using the <em>view object pattern</em> with the Test FX Robot DSL.
  *
  * <p>
- * If you use the view object pattern, mixing trait <code>ViewObject</code> into your view classes will allow you to use the <code>go to</code>
- * syntax with your page objects. Here's an example:
+ * If you use the view object pattern, mixing trait <code>ViewObject</code> into your view classes
+ * will allow you to use the <code>go to</code> syntax with your page objects. Here's an example:
  * </p>
  *
  * <pre class="stHighlight">

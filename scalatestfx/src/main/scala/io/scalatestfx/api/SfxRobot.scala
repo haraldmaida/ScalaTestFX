@@ -56,12 +56,28 @@ trait SfxRobot {
 
   val delegate = new jtfx.FxRobot()
 
-  private val context = delegate.robotContext
-
   def robotContext(): jtfx.FxRobotContext = delegate.robotContext()
 
+
+  //=============================================================================================
   //---------------------------------------------------------------------------------------------
-  // METHODS FOR WINDOW TARGETING.
+  // ADDITIONAL DSL METHODS (NOT AVAILABLE IN TestFX)
+  //---------------------------------------------------------------------------------------------
+  //=============================================================================================
+
+  def sleep(duration: FiniteDuration): SfxRobot = {
+    delegate.sleep(duration.length, duration.unit)
+    this
+  }
+
+  //=============================================================================================
+  //---------------------------------------------------------------------------------------------
+  // DSL METHODS DEFINED IN THE API OF TestFX (FxRobotInterface)
+  //---------------------------------------------------------------------------------------------
+  //=============================================================================================
+
+  //---------------------------------------------------------------------------------------------
+  // METHODS FOR WINDOW TARGETING
   //---------------------------------------------------------------------------------------------
 
   def targetWindow: Window =
@@ -107,7 +123,7 @@ trait SfxRobot {
   }
 
   //---------------------------------------------------------------------------------------------
-  // METHODS FOR WINDOW LOOKUP.
+  // METHODS FOR WINDOW LOOKUP
   //---------------------------------------------------------------------------------------------
 
   def listWindows: Seq[Window] =
@@ -138,7 +154,7 @@ trait SfxRobot {
     delegate.window(node)
 
   //---------------------------------------------------------------------------------------------
-  // METHODS FOR NODE LOOKUP.
+  // METHODS FOR NODE LOOKUP
   //---------------------------------------------------------------------------------------------
 
   //TODO maybe we need our own ScalaTestFX NodeQuery
@@ -176,7 +192,7 @@ trait SfxRobot {
     delegate.rootNode(node)
 
   //---------------------------------------------------------------------------------------------
-  // METHODS FOR BOUNDS LOCATION.
+  // METHODS FOR BOUNDS LOCATION
   //---------------------------------------------------------------------------------------------
 
   //TODO maybe we need our own ScalaTestFX BoundsQuery
@@ -214,16 +230,16 @@ trait SfxRobot {
     })
 
   //---------------------------------------------------------------------------------------------
-  // METHODS FOR POINT POSITION.
+  // METHODS FOR POINT POSITION
   //---------------------------------------------------------------------------------------------
 
   def targetPos(pointPosition: Pos): SfxRobot = {
-    context.setPointPosition(pointPosition)
+    delegate.robotContext.setPointPosition(pointPosition)
     this
   }
 
   //---------------------------------------------------------------------------------------------
-  // METHODS FOR POINT LOCATION.
+  // METHODS FOR POINT LOCATION
   //---------------------------------------------------------------------------------------------
 
   //TODO maybe we need our own ScalaTestFX PointQuery
@@ -261,7 +277,7 @@ trait SfxRobot {
     })
 
   //---------------------------------------------------------------------------------------------
-  // METHODS FOR POINT OFFSET.
+  // METHODS FOR POINT OFFSET
   //---------------------------------------------------------------------------------------------
 
   def offset(point: Point2D, offsetX: Double, offsetY: Double): PointQuery =
@@ -293,7 +309,7 @@ trait SfxRobot {
     }, offsetX, offsetY)
 
   //---------------------------------------------------------------------------------------------
-  // METHODS FOR SCREEN CAPTURING.
+  // METHODS FOR SCREEN CAPTURING
   //---------------------------------------------------------------------------------------------
 
   def capture(screen: Screen): Image =
@@ -306,7 +322,7 @@ trait SfxRobot {
     delegate.capture(node)
 
   //---------------------------------------------------------------------------------------------
-  // IMPLEMENTATION OF TYPE ROBOT.
+  // IMPLEMENTATION OF TYPE ROBOT
   //---------------------------------------------------------------------------------------------
 
   def push(combination: KeyCode*): SfxRobot = {
@@ -339,7 +355,7 @@ trait SfxRobot {
   }
 
   //---------------------------------------------------------------------------------------------
-  // IMPLEMENTATION OF WRITE ROBOT.
+  // IMPLEMENTATION OF WRITE ROBOT
   //---------------------------------------------------------------------------------------------
 
   def write(character: Char): SfxRobot = {
@@ -353,13 +369,8 @@ trait SfxRobot {
   }
 
   //---------------------------------------------------------------------------------------------
-  // IMPLEMENTATION OF SLEEP ROBOT.
+  // IMPLEMENTATION OF SLEEP ROBOT
   //---------------------------------------------------------------------------------------------
-
-  def sleep(duration: FiniteDuration): SfxRobot = {
-    delegate.sleep(duration.length, duration.unit)
-    this
-  }
 
   def sleep(length: Long, unit: TimeUnit): SfxRobot = {
     delegate.sleep(length, unit)
@@ -367,7 +378,7 @@ trait SfxRobot {
   }
 
   //---------------------------------------------------------------------------------------------
-  // IMPLEMENTATION OF SCROLL ROBOT.
+  // IMPLEMENTATION OF SCROLL ROBOT
   //---------------------------------------------------------------------------------------------
 
   def scroll(amount: Int, direction: VerticalDirection): SfxRobot = {
@@ -380,37 +391,45 @@ trait SfxRobot {
   }
 
   //---------------------------------------------------------------------------------------------
-  // IMPLEMENTATION OF KEYBOARD ROBOT.
+  // IMPLEMENTATION OF KEYBOARD ROBOT
   //---------------------------------------------------------------------------------------------
 
-  def press(keys: KeyCode*): SfxRobot = {
+  /**
+   * Note: the original methods for pressing keys have been renamed from press to pressKey.
+   * This became necessary because in Scala the signatures of press(KeyCode*) and
+   * press(MouseButton*) are equal.
+   */
+  def pressKey(keys: KeyCode*): SfxRobot = {
     delegate.press(sfxKeyCodeSeq2jfx(keys): _*)
     this
   }
 
-  def release(keys: KeyCode*): SfxRobot = {
+  /**
+   * Note: the original methods for releasing keys have been renamed from release to releaseKey.
+   * This became necessary because in Scala the signatures of release(KeyCode*) and
+   * release(MouseButton*) are equal.
+   */
+  def releaseKey(keys: KeyCode*): SfxRobot = {
     delegate.release(sfxKeyCodeSeq2jfx(keys): _*)
     this
   }
 
   //---------------------------------------------------------------------------------------------
-  // IMPLEMENTATION OF MOUSE ROBOT.
+  // IMPLEMENTATION OF MOUSE ROBOT
   //---------------------------------------------------------------------------------------------
 
-  //TODO find new DSL method names because scala does not allow same method with different type of Seq
-  def press2(buttons: MouseButton*): SfxRobot = {
+  def press(buttons: MouseButton*): SfxRobot = {
     delegate.press(sfxMouseButtonSeq2jfx(buttons): _*)
     this
   }
 
-  //TODO find new DSL method names because scala does not allow same method with different type of Seq
-  def release2(buttons: MouseButton*): SfxRobot = {
+  def release(buttons: MouseButton*): SfxRobot = {
     delegate.release(sfxMouseButtonSeq2jfx(buttons): _*)
     this
   }
 
   //---------------------------------------------------------------------------------------------
-  // IMPLEMENTATION OF CLICK ROBOT.
+  // IMPLEMENTATION OF CLICK ROBOT
   //---------------------------------------------------------------------------------------------
 
   def clickOn(buttons: MouseButton*): SfxRobot = {
