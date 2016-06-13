@@ -1,0 +1,39 @@
+/*
+ * Copyright (c) 2016, Innoave.com
+ * All rights reserved.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL INNOAVE.COM OR ITS CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
+ * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+package io.scalatestfx.service.query
+
+import scalafx.geometry.Point2D
+import scalafx.geometry.Pos
+
+trait PointQuery {
+
+  def position: Point2D
+
+  def offset: Point2D
+
+  def atPosition(position: Point2D): PointQuery
+
+  def atPosition(positionX: Double, positionY: Double): PointQuery
+
+  def atPosition(position: Pos): PointQuery
+
+  def atOffset(offset: Point2D): PointQuery
+
+  def atOffset(offsetX: Double, offsetY: Double): PointQuery
+
+  def query(): Point2D
+
+}
