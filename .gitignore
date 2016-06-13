@@ -1,8 +1,9 @@
+# Compiled source
 *.class
-*.log
 
 # sbt specific
 .cache
+.cache-main
 .history
 .lib/
 dist/*
@@ -15,3 +16,26 @@ project/plugins/project/
 # Scala-IDE specific
 .scala_dependencies
 .worksheet
+
+# Eclipse specific
+.project
+.classpath
+.settings/
+bin/
+
+# IntelliJ specific files/directories
+out
+.idea
+*.ipr
+*.iws
+*.iml
+atlassian-ide-plugin.xml
+
+# Logs and databases
+*.log
+
+# OS generated files
+.DS_Store*
+ehthumbs.db
+Icon?
+Thumbs.db
