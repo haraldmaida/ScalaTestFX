@@ -2,8 +2,10 @@
 
 Write TestFX tests using ScalaTest specifications
 
-[![Build Status](https://travis-ci.org/haraldmaida/ScalaTestFX.svg?branch=master&style=flat-square)](https://travis-ci.org/haraldmaida/ScalaTestFX)
-[![Bintray JCenter](https://img.shields.io/bintray/v/haraldmaida/scalatestfx/scalatestfx.svg?label=bintray&style=flat-square)](https://bintray.com/haraldmaida/scalatestfx)
+[![Build Status]((https://img.shields.io/travis/haraldmaida/ScalaTestFX/master.svg?style=flat-square)](https://travis-ci.org/haraldmaida/ScalaTestFX)
+[![Bintray JCenter](https://img.shields.io/bintray/v/haraldmaida/scalatestfx/scalatestfx.svg?style=flat-square)](https://bintray.com/haraldmaida/ScalaTestFX)
+[![Maven Central](https://img.shields.io/maven-central/v/io.scalatestfx/scalatestfx.svg?style=flat-square)](https://search.maven.org/#search|ga|1|io.scalatestfx)
+
 
 
 ## License
