@@ -16,33 +16,39 @@
 package io.scalatestfx.framework.scalatest
 
 import java.util.function.Supplier
+import javafx.stage.Stage
 import org.scalatest.Outcome
 import org.scalatest.TestSuite
 import org.scalatest.TestSuiteMixin
 import org.testfx.api.FxToolkit
-import scalafx.application.JFXApp.PrimaryStage
-import scalafx.application.JFXApp
+import javafx.scene.Parent
 
-trait JFXAppFixture extends TestSuiteMixin { self: TestSuite =>
+trait ApplicationFixture extends TestSuiteMixin { self: TestSuite =>
 
-  /**
-   * Important: The {#stage} must be overridden as def or lazy val.
-   * Otherwise a NullPointerException occurs.
-   */
-  def stage(): PrimaryStage
+  def start(start: Stage): Unit
 
-  def stopApp(): Unit = {}
+  def init() {
+    FxToolkit.registerStage(new Supplier[Stage] {
+      override def get() = {
+        new Stage()
+      }
+    })
+  }
+
+  def stop() {
+    FxToolkit.hideStage()
+  }
 
   abstract override def withFixture(test: NoArgTest): Outcome = {
     val superWithFixture = super.withFixture _   // required to access to super withFixture method from within runnable for a trait
     //setup before all tests
     FxToolkit.registerPrimaryStage()
     FxToolkit.setupApplication(new Supplier[javafx.application.Application] {
-      override def get() = new JFXAppAdapter(JFXAppFixture.this)
+      override def get() = new ApplicationAdapter(ApplicationFixture.this)
     })
     val outcome = superWithFixture(test)
     //cleanup after all tests
-    FxToolkit.cleanupApplication(new JFXAppAdapter(JFXAppFixture.this))
+    FxToolkit.cleanupApplication(new ApplicationAdapter(ApplicationFixture.this))
     outcome
   }
 

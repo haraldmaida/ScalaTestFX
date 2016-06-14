@@ -17,42 +17,30 @@ package io.scalatestfx.cases.acceptance
 
 import scala.concurrent.duration._
 import io.scalatestfx.api.SfxRobot
-import io.scalatestfx.api.ViewObject
-import io.scalatestfx.framework.scalatest.JFXAppFixture
+import io.scalatestfx.framework.scalatest.ApplicationFixture
 import io.scalatestfx.testing.AcceptanceSpec
 import io.scalatestfx.testing.UiTest
 import org.testfx.api.FxAssert.verifyThat
 import org.testfx.matcher.base.NodeMatchers.hasText
-import scalafx.application.JFXApp
-import scalafx.application.JFXApp.PrimaryStage
+import javafx.stage.Stage
+import javafx.scene.Scene
+import javafx.scene.control.Button
+import javafx.scene.layout.StackPane
 import scalafx.Includes._
 import scalafx.event.ActionEvent
-import scalafx.scene.Scene
-import scalafx.scene.control.Button
-import scalafx.scene.layout.StackPane
 
 @UiTest
-class JFXAppStartSpec extends AcceptanceSpec
+class ApplicationStartSpec extends AcceptanceSpec
     with SfxRobot
-    with JFXAppFixture
+    with ApplicationFixture
 {
 
-  override lazy val stage: PrimaryStage = new JFXApp.PrimaryStage with ViewObject {
-    title = "Hallo World!"
-    width = 200
-    height = 200
-    scene = new Scene {
-      content = new StackPane {
-        children = Seq(
-          new Button {
-            text = "click me!"
-            onAction = { _: ActionEvent =>
-              text = "clicked!"
-            }
-          }
-        )
-      }
-    }
+  override def start(stage: Stage) {
+    stage.setTitle("Hallo World!")
+    val button = new Button("click me!")
+    button.setOnAction((_: ActionEvent) -> button.setText("clicked!"))
+    stage.setScene(new Scene(new StackPane(button), 100, 100))
+    stage.show()
   }
 
   "JFXappFixture mixed in in spec" should "start an simple JFXApp" in {

@@ -16,30 +16,23 @@
 package io.scalatestfx.framework.scalatest
 
 import java.util.function.Supplier
-import javafx.{stage => jfxst}
+import javafx.stage.Stage
 import org.testfx.api.FxToolkit
-import scalafx.application.JFXApp
 
-class JFXAppAdapter(
-    val jfxAppFixture: JFXAppFixture
+class ApplicationAdapter(
+    val applicationFixture: ApplicationFixture
     ) extends javafx.application.Application {
 
   override def init() {
-    FxToolkit.registerStage(new Supplier[jfxst.Stage] {
-      override def get() = {
-        JFXApp.Stage = new jfxst.Stage()
-        jfxAppFixture.stage.delegate
-      }
-    })
+    applicationFixture.init()
   }
 
-  override def start(stage: jfxst.Stage) {
-    stage.show()
+  override def start(stage: Stage) {
+    applicationFixture.start(stage)
   }
 
   override def stop() {
-    FxToolkit.hideStage()
-    jfxAppFixture.stopApp
+    applicationFixture.stop()
   }
 
 }
