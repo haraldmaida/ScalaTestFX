@@ -38,19 +38,19 @@ object JfxConversions extends JfxConversions
 
 trait JfxConversions {
 
-  implicit def toSfxWindowSeq(windowList: java.util.List[jfxst.Window]): Seq[Window] =
+  implicit def asSfxWindowSeq(windowList: java.util.List[jfxst.Window]): Seq[Window] =
     windowList.map[Window, Seq[Window]] { window => window }
 
-  implicit def toSfxNodeSet(nodeSet: java.util.Set[jfxsc.Node]): Set[Node] =
+  implicit def asSfxNodeSet(nodeSet: java.util.Set[jfxsc.Node]): Set[Node] =
     nodeSet.map[Node, Set[Node]] { node => node }
 
-  implicit def toJfxNodeSeq(nodeSeq: Seq[Node]): java.util.List[jfxsc.Node] =
+  implicit def asJfxNodeSeq(nodeSeq: Seq[Node]): java.util.List[jfxsc.Node] =
     nodeSeq.map[jfxsc.Node, Seq[jfxsc.Node]] { node => node }
 
-  implicit def toJfxKeyCodeSeq(keyCodes: Seq[KeyCode]): Seq[jfxin.KeyCode] =
+  implicit def asJfxKeyCodeSeq(keyCodes: Seq[KeyCode]): Seq[jfxin.KeyCode] =
     keyCodes.map[jfxin.KeyCode, Seq[jfxin.KeyCode]] { keyCode => keyCode }
 
-  implicit def toJfxMouseButtonSeq(mouseButtons: Seq[MouseButton]): Seq[jfxin.MouseButton] =
+  implicit def asJfxMouseButtonSeq(mouseButtons: Seq[MouseButton]): Seq[jfxin.MouseButton] =
     mouseButtons.map[jfxin.MouseButton, Seq[jfxin.MouseButton]] { mouseButton => mouseButton }
 
 }
@@ -59,7 +59,7 @@ object GuavaConversions extends GuavaConversions
 
 trait GuavaConversions {
 
-  implicit def toPredicate[T](f: T => Boolean) =
+  implicit def asPredicate[T](f: T => Boolean) =
     new com.google.common.base.Predicate[T] {
       override def apply(v: T): Boolean =
         f(v)
@@ -71,7 +71,7 @@ object Java8Conversions extends Java8Conversions
 
 trait Java8Conversions {
 
-  implicit def toSupplier[T](f: () => T) =
+  implicit def asSupplier[T](f: () => T) =
     new java.util.function.Supplier[T] {
       override def get(): T =
         f()

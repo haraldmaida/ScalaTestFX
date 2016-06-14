@@ -13,27 +13,29 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.scalatestfx.service.query
+package io.scalatestfx.zzznolongerused
 
-import scalafx.geometry.Point2D
-import scalafx.geometry.Pos
+import scalafx.scene.Node
+import org.scalatest.matchers.Matcher
 
-trait PointQuery {
+trait NodeQuery {
 
-  def position: Point2D
+  def from(parentNodes: Node*): NodeQuery
 
-  def offset: Point2D
+  def lookup(query: String): NodeQuery
 
-  def atPosition(position: Point2D): PointQuery
+  def lookup[T](matcher: Matcher[T]): NodeQuery
 
-  def atPosition(positionX: Double, positionY: Double): PointQuery
+  def lookup[T <: Node](predicate: (T) => Boolean): NodeQuery
 
-  def atPosition(position: Pos): PointQuery
+  def matching[T](matcher: Matcher[T]): NodeQuery
 
-  def atOffset(offset: Point2D): PointQuery
+  def matching[T](predicate: (T) => Boolean): NodeQuery
 
-  def atOffset(offsetX: Double, offsetY: Double): PointQuery
+  def nth(index: Int): NodeQuery
 
-  def query(): Point2D
+  def query[T <: Node](): Option[T]
+
+  def queryAll[T <: Node](): Set[T]
 
 }
