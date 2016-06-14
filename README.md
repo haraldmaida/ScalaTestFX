@@ -2,6 +2,7 @@
 
 Write TestFX tests using ScalaTest specifications
 
+[![Build Status](https://travis-ci.org/haraldmaida/ScalaTestFX.svg?branch=master)](https://travis-ci.org/haraldmaida/ScalaTestFX)
 
 ## License
 
