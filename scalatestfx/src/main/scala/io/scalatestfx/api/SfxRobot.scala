@@ -43,7 +43,7 @@ import scalafx.scene.input.KeyCodeCombination
 import scalafx.scene.input.MouseButton
 import scala.collection.JavaConversions._
 import scalafx.Includes._
-import io.scalatestfx.api.Includes._
+import io.scalatestfx.api.ImplicitConversions._
 
 /*
 object SfxRobot {
@@ -326,7 +326,7 @@ trait SfxRobot {
   //---------------------------------------------------------------------------------------------
 
   def push(combination: KeyCode*): SfxRobot = {
-    delegate.push(sfxKeyCodeSeq2jfx(combination): _*)
+    delegate.push(toJfxKeyCodeSeq(combination): _*)
     this
   }
 
@@ -400,7 +400,7 @@ trait SfxRobot {
    * press(MouseButton*) are equal.
    */
   def pressKey(keys: KeyCode*): SfxRobot = {
-    delegate.press(sfxKeyCodeSeq2jfx(keys): _*)
+    delegate.press(toJfxKeyCodeSeq(keys): _*)
     this
   }
 
@@ -410,7 +410,7 @@ trait SfxRobot {
    * release(MouseButton*) are equal.
    */
   def releaseKey(keys: KeyCode*): SfxRobot = {
-    delegate.release(sfxKeyCodeSeq2jfx(keys): _*)
+    delegate.release(toJfxKeyCodeSeq(keys): _*)
     this
   }
 
@@ -419,12 +419,12 @@ trait SfxRobot {
   //---------------------------------------------------------------------------------------------
 
   def press(buttons: MouseButton*): SfxRobot = {
-    delegate.press(sfxMouseButtonSeq2jfx(buttons): _*)
+    delegate.press(toJfxMouseButtonSeq(buttons): _*)
     this
   }
 
   def release(buttons: MouseButton*): SfxRobot = {
-    delegate.release(sfxMouseButtonSeq2jfx(buttons): _*)
+    delegate.release(toJfxMouseButtonSeq(buttons): _*)
     this
   }
 
@@ -433,67 +433,67 @@ trait SfxRobot {
   //---------------------------------------------------------------------------------------------
 
   def clickOn(buttons: MouseButton*): SfxRobot = {
-    delegate.clickOn(sfxMouseButtonSeq2jfx(buttons): _*)
+    delegate.clickOn(toJfxMouseButtonSeq(buttons): _*)
     this
   }
 
   def clickOn(pointQuery: PointQuery, buttons: MouseButton*): SfxRobot = {
-    delegate.clickOn(pointQuery, sfxMouseButtonSeq2jfx(buttons): _*)
+    delegate.clickOn(pointQuery, toJfxMouseButtonSeq(buttons): _*)
     this
   }
 
   def doubleClickOn(buttons: MouseButton*): SfxRobot = {
-    delegate.doubleClickOn(sfxMouseButtonSeq2jfx(buttons): _*)
+    delegate.doubleClickOn(toJfxMouseButtonSeq(buttons): _*)
     this
   }
 
   def doubleClickOn(pointQuery: PointQuery, buttons: MouseButton*): SfxRobot = {
-    delegate.doubleClickOn(pointQuery, sfxMouseButtonSeq2jfx(buttons): _*)
+    delegate.doubleClickOn(pointQuery, toJfxMouseButtonSeq(buttons): _*)
     this
   }
 
   def clickOn(x: Double, y: Double, buttons: MouseButton*): SfxRobot = {
-    delegate.clickOn(x, y, sfxMouseButtonSeq2jfx(buttons): _*)
+    delegate.clickOn(x, y, toJfxMouseButtonSeq(buttons): _*)
     this
   }
 
   def clickOn(point: Point2D, buttons: MouseButton*): SfxRobot = {
-    delegate.clickOn(point, sfxMouseButtonSeq2jfx(buttons): _*)
+    delegate.clickOn(point, toJfxMouseButtonSeq(buttons): _*)
     this
   }
 
   def clickOn(bounds: Bounds, buttons: MouseButton*): SfxRobot = {
-    delegate.clickOn(bounds, sfxMouseButtonSeq2jfx(buttons): _*)
+    delegate.clickOn(bounds, toJfxMouseButtonSeq(buttons): _*)
     this
   }
 
   def clickOn(node: Node, buttons: MouseButton*): SfxRobot = {
-    delegate.clickOn(node, sfxMouseButtonSeq2jfx(buttons): _*)
+    delegate.clickOn(node, toJfxMouseButtonSeq(buttons): _*)
     this
   }
 
   def clickOn(scene: Scene, buttons: MouseButton*): SfxRobot = {
-    delegate.clickOn(scene, sfxMouseButtonSeq2jfx(buttons): _*)
+    delegate.clickOn(scene, toJfxMouseButtonSeq(buttons): _*)
     this
   }
 
   def clickOn(window: Window, buttons: MouseButton*): SfxRobot = {
-    delegate.clickOn(window, sfxMouseButtonSeq2jfx(buttons): _*)
+    delegate.clickOn(window, toJfxMouseButtonSeq(buttons): _*)
     this
   }
 
   def clickOn(query: String, buttons: MouseButton*): SfxRobot = {
-    delegate.clickOn(query, sfxMouseButtonSeq2jfx(buttons): _*)
+    delegate.clickOn(query, toJfxMouseButtonSeq(buttons): _*)
     this
   }
 
   def clickOn[J <: jfxsc.Node](matcher: Matcher[J], buttons: MouseButton*): SfxRobot = {
-    delegate.clickOn(matcher, sfxMouseButtonSeq2jfx(buttons): _*)
+    delegate.clickOn(matcher, toJfxMouseButtonSeq(buttons): _*)
     this
   }
 
   def clickOn[J <: jfxsc.Node](predicate: (J) => Boolean, buttons: MouseButton*): SfxRobot = {
-    delegate.clickOn(predicate, sfxMouseButtonSeq2jfx(buttons): _*)
+    delegate.clickOn(predicate, toJfxMouseButtonSeq(buttons): _*)
     this
   }
 

@@ -15,13 +15,13 @@
  */
 package io.scalatestfx.framework.scalatest
 
-import java.util.function.Supplier
 import org.scalatest.Outcome
 import org.scalatest.TestSuite
 import org.scalatest.TestSuiteMixin
 import org.testfx.api.FxToolkit
 import scalafx.application.JFXApp.PrimaryStage
 import scalafx.application.JFXApp
+import io.scalatestfx.api.Java8Conversions._
 
 trait JFXAppFixture extends TestSuiteMixin { self: TestSuite =>
 
@@ -37,8 +37,8 @@ trait JFXAppFixture extends TestSuiteMixin { self: TestSuite =>
     val superWithFixture = super.withFixture _   // required to access to super withFixture method from within runnable for a trait
     //setup before all tests
     FxToolkit.registerPrimaryStage()
-    FxToolkit.setupApplication(new Supplier[javafx.application.Application] {
-      override def get() = new JFXAppAdapter(JFXAppFixture.this)
+    FxToolkit.setupApplication(() => {
+      new JFXAppAdapter(JFXAppFixture.this)
     })
     val outcome = superWithFixture(test)
     //cleanup after all tests

@@ -26,31 +26,31 @@ import scalafx.scene.Node
 import scalafx.scene.input.KeyCode
 import scalafx.scene.input.MouseButton
 import scalafx.scene.SceneIncludes._
-import com.google.common.base.Predicate
 
-object Includes extends Includes
+object ImplicitConversions extends ImplicitConversions
 
-trait Includes
+trait ImplicitConversions
     extends JfxConversions
     with GuavaConversions
+    with Java8Conversions
 
 object JfxConversions extends JfxConversions
 
 trait JfxConversions {
 
-  implicit def jfxWindowSeq2sfx(windowList: java.util.List[jfxst.Window]): Seq[Window] =
+  implicit def toSfxWindowSeq(windowList: java.util.List[jfxst.Window]): Seq[Window] =
     windowList.map[Window, Seq[Window]] { window => window }
 
-  implicit def jfxNodeSet2sfx(nodeSet: java.util.Set[jfxsc.Node]): Set[Node] =
+  implicit def toSfxNodeSet(nodeSet: java.util.Set[jfxsc.Node]): Set[Node] =
     nodeSet.map[Node, Set[Node]] { node => node }
 
-  implicit def sfxNodeSeq2jfx(nodeSeq: Seq[Node]): java.util.List[jfxsc.Node] =
+  implicit def toJfxNodeSeq(nodeSeq: Seq[Node]): java.util.List[jfxsc.Node] =
     nodeSeq.map[jfxsc.Node, Seq[jfxsc.Node]] { node => node }
 
-  implicit def sfxKeyCodeSeq2jfx(keyCodes: Seq[KeyCode]): Seq[jfxin.KeyCode] =
+  implicit def toJfxKeyCodeSeq(keyCodes: Seq[KeyCode]): Seq[jfxin.KeyCode] =
     keyCodes.map[jfxin.KeyCode, Seq[jfxin.KeyCode]] { keyCode => keyCode }
 
-  implicit def sfxMouseButtonSeq2jfx(mouseButtons: Seq[MouseButton]): Seq[jfxin.MouseButton] =
+  implicit def toJfxMouseButtonSeq(mouseButtons: Seq[MouseButton]): Seq[jfxin.MouseButton] =
     mouseButtons.map[jfxin.MouseButton, Seq[jfxin.MouseButton]] { mouseButton => mouseButton }
 
 }
@@ -60,9 +60,21 @@ object GuavaConversions extends GuavaConversions
 trait GuavaConversions {
 
   implicit def toPredicate[T](f: T => Boolean) =
-    new Predicate[T] {
+    new com.google.common.base.Predicate[T] {
       override def apply(v: T): Boolean =
         f(v)
+    }
+
+}
+
+object Java8Conversions extends Java8Conversions
+
+trait Java8Conversions {
+
+  implicit def toSupplier[T](f: () => T) =
+    new java.util.function.Supplier[T] {
+      override def get(): T =
+        f()
     }
 
 }

@@ -15,21 +15,19 @@
  */
 package io.scalatestfx.framework.scalatest
 
-import java.util.function.Supplier
 import javafx.{stage => jfxst}
 import org.testfx.api.FxToolkit
 import scalafx.application.JFXApp
+import io.scalatestfx.api.Java8Conversions._
 
 class JFXAppAdapter(
     val jfxAppFixture: JFXAppFixture
     ) extends javafx.application.Application {
 
   override def init() {
-    FxToolkit.registerStage(new Supplier[jfxst.Stage] {
-      override def get() = {
+    FxToolkit.registerStage(() => {
         JFXApp.Stage = new jfxst.Stage()
         jfxAppFixture.stage.delegate
-      }
     })
   }
 
