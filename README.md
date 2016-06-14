@@ -1,9 +1,8 @@
-# ScalaTestFX  [![Join the chat at https://gitter.im/haraldmaida/ScalaTestFX](https://badges.gitter.im/haraldmaida/ScalaTestFX.svg)](https://gitter.im/haraldmaida/ScalaTestFX?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# ScalaTestFX  [![Join the chat at https://gitter.im/haraldmaida/ScalaTestFX](https://badges.gitter.im/haraldmaida/ScalaTestFX.svg?style=flat-square)](https://gitter.im/haraldmaida/ScalaTestFX?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Write TestFX tests using ScalaTest specifications
 
-[![Build Status](https://travis-ci.org/haraldmaida/ScalaTestFX.svg?branch=master)](https://travis-ci.org/haraldmaida/ScalaTestFX)
-[![Download](https://api.bintray.com/packages/haraldmaida/maven/scalatestfx/images/download.svg)](https://bintray.com/haraldmaida/maven/scalatestfx/_latestVersion)
+[![Build Status](https://travis-ci.org/haraldmaida/ScalaTestFX.svg?branch=master&style=flat-square)](https://travis-ci.org/haraldmaida/ScalaTestFX)
 [![Bintray JCenter](https://img.shields.io/bintray/v/haraldmaida/scalatestfx/scalatestfx.svg?label=bintray&style=flat-square)](https://bintray.com/haraldmaida/scalatestfx)
 
 
