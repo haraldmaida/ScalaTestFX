@@ -16,16 +16,6 @@
 package io.scalatestfx.api
 
 import scala.language.implicitConversions
-import scala.collection.JavaConversions._
-import javafx.{geometry => jfxge}
-import javafx.{stage => jfxst}
-import javafx.{scene => jfxsc}
-import javafx.scene.{input => jfxin}
-import scalafx.stage.Window
-import scalafx.scene.Node
-import scalafx.scene.input.KeyCode
-import scalafx.scene.input.MouseButton
-import scalafx.scene.SceneIncludes._
 
 object ImplicitConversions extends ImplicitConversions
 
@@ -37,6 +27,17 @@ trait ImplicitConversions
 object JfxConversions extends JfxConversions
 
 trait JfxConversions {
+  import javafx.{geometry => jfxge}
+  import javafx.{stage => jfxst}
+  import javafx.{scene => jfxsc}
+  import javafx.scene.{input => jfxin}
+  import scalafx.stage.Window
+  import scalafx.scene.Node
+  import scalafx.scene.input.KeyCode
+  import scalafx.scene.input.MouseButton
+  import scalafx.scene.SceneIncludes._
+  import scalafx.scene.input.InputIncludes._
+  import scala.collection.JavaConversions._
 
   implicit def asSfxWindowSeq(windowList: java.util.List[jfxst.Window]): Seq[Window] =
     windowList.map[Window, Seq[Window]] { window => window }
@@ -44,8 +45,17 @@ trait JfxConversions {
   implicit def asSfxNodeSet(nodeSet: java.util.Set[jfxsc.Node]): Set[Node] =
     nodeSet.map[Node, Set[Node]] { node => node }
 
-  implicit def asJfxNodeSeq(nodeSeq: Seq[Node]): java.util.List[jfxsc.Node] =
-    nodeSeq.map[jfxsc.Node, Seq[jfxsc.Node]] { node => node }
+  implicit def asSfxNodeList(nodeList: java.util.List[jfxsc.Node]): List[Node] =
+    nodeList.map[Node, List[Node]] { node => node }
+
+  implicit def asSfxMouseButtonSeq(mouseButtons: Seq[jfxin.MouseButton]): Seq[MouseButton] =
+    mouseButtons.map[MouseButton, Seq[MouseButton]] { mouseButton => mouseButton }
+
+  implicit def asJfxNodeSet(nodeSet: Set[Node]): Set[jfxsc.Node] =
+    nodeSet.map[jfxsc.Node, Set[jfxsc.Node]] { node => node }
+
+  implicit def asJfxNodeSet(nodeList: List[Node]): List[jfxsc.Node] =
+    nodeList.map[jfxsc.Node, List[jfxsc.Node]] { node => node }
 
   implicit def asJfxKeyCodeSeq(keyCodes: Seq[KeyCode]): Seq[jfxin.KeyCode] =
     keyCodes.map[jfxin.KeyCode, Seq[jfxin.KeyCode]] { keyCode => keyCode }
