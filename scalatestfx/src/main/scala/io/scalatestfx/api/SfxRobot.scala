@@ -40,10 +40,6 @@ import io.scalatestfx.api.GuavaConversions._
 import org.testfx.api.FxRobotInterface
 import org.testfx.api.FxRobotContext
 
-class SfxRobotWrapper(
-    override val delegate: FxRobotInterface
-    ) extends SfxRobot
-
 /**
  * Mixin trait that defines the DSL of TestFX for being used in ScalaTest specficiations.
  *
@@ -51,9 +47,16 @@ class SfxRobotWrapper(
  *
  * Current version of the wrapped FxRobot is 4.0.4-alpha
  */
-trait SfxRobot {
+trait SfxRobot extends SfxRobotDsl {
+  val delegate = new FxRobot()
+}
 
-  val delegate: FxRobotInterface = new FxRobot()
+/**
+ * Definition of the DSL used to operate with the JavaFX application under test.
+ */
+trait SfxRobotDsl {
+
+  def delegate: FxRobotInterface
 
   //=============================================================================================
   //---------------------------------------------------------------------------------------------
@@ -61,7 +64,7 @@ trait SfxRobot {
   //---------------------------------------------------------------------------------------------
   //=============================================================================================
 
-  def sleep(duration: FiniteDuration): SfxRobot = {
+  def sleep(duration: FiniteDuration): SfxRobotDsl = {
     delegate.sleep(duration.length, duration.unit)
     this
   }
@@ -79,37 +82,37 @@ trait SfxRobot {
   def targetWindow: Window =
     delegate.targetWindow
 
-  def targetWindow(window: Window): SfxRobot = {
+  def targetWindow(window: Window): SfxRobotDsl = {
     delegate.targetWindow(window)
     this
   }
 
-  def targetWindow(predicate: (Window) => Boolean): SfxRobot = {
+  def targetWindow(predicate: (Window) => Boolean): SfxRobotDsl = {
     delegate.targetWindow(predicate)
     this
   }
 
-  def targetWindow(windowNumber: Int): SfxRobot = {
+  def targetWindow(windowNumber: Int): SfxRobotDsl = {
     delegate.targetWindow(windowNumber)
     this
   }
 
-  def targetWindow(stageTitleRegex: String): SfxRobot = {
+  def targetWindow(stageTitleRegex: String): SfxRobotDsl = {
     delegate.targetWindow(stageTitleRegex)
     this
   }
 
-  def targetWindow(stageTitlePattern: Pattern): SfxRobot = {
+  def targetWindow(stageTitlePattern: Pattern): SfxRobotDsl = {
     delegate.targetWindow(stageTitlePattern)
     this
   }
 
-  def targetWindow(scene: Scene): SfxRobot = {
+  def targetWindow(scene: Scene): SfxRobotDsl = {
     delegate.targetWindow(scene)
     this
   }
 
-  def targetWindow(node: Node): SfxRobot = {
+  def targetWindow(node: Node): SfxRobotDsl = {
     delegate.targetWindow(node)
     this
   }
@@ -208,7 +211,7 @@ trait SfxRobot {
   // METHODS FOR POINT POSITION
   //---------------------------------------------------------------------------------------------
 
-  def targetPos(pointPosition: Pos): SfxRobot = {
+  def targetPos(pointPosition: Pos): SfxRobotDsl = {
     delegate.targetPos(pointPosition)
     this
   }
@@ -295,7 +298,7 @@ trait SfxRobot {
   // METHODS FOR SLEEPING
   //---------------------------------------------------------------------------------------------
 
-  def sleep(length: Long, unit: TimeUnit): SfxRobot = {
+  def sleep(length: Long, unit: TimeUnit): SfxRobotDsl = {
     delegate.sleep(length, unit)
     this
   }
@@ -304,12 +307,12 @@ trait SfxRobot {
   // METHODS FOR TYPING
   //---------------------------------------------------------------------------------------------
 
-  def push(combination: KeyCode*): SfxRobot = {
+  def push(combination: KeyCode*): SfxRobotDsl = {
     delegate.push(combination: _*)
     this
   }
 
-  def push(combination: KeyCodeCombination): SfxRobot = {
+  def push(combination: KeyCodeCombination): SfxRobotDsl = {
     delegate.push(combination)
     this
   }
@@ -319,7 +322,7 @@ trait SfxRobot {
    * in Scala and one would have to type the method name with surrounding back-ticks which
    * is uncomfortable.
    */
-  def typing(keys: KeyCode*): SfxRobot = {
+  def typing(keys: KeyCode*): SfxRobotDsl = {
     delegate.`type`(keys: _*)
     this
   }
@@ -329,17 +332,17 @@ trait SfxRobot {
    * in Scala and one would have to type the method name with surrounding back-ticks which is
    * uncomfortable.
    */
-  def typing(key: KeyCode, times: Int): SfxRobot = {
+  def typing(key: KeyCode, times: Int): SfxRobotDsl = {
     delegate.`type`(key, times)
     this
   }
 
-  def eraseText(amount: Int): SfxRobot = {
+  def eraseText(amount: Int): SfxRobotDsl = {
     delegate.eraseText(amount)
     this
   }
 
-  def closeCurrentWindow(): SfxRobot = {
+  def closeCurrentWindow(): SfxRobotDsl = {
     push(KeyCode.ALT, KeyCode.F4).sleep(100.millis)
   }
 
@@ -347,12 +350,12 @@ trait SfxRobot {
   // METHODS FOR WRITING
   //---------------------------------------------------------------------------------------------
 
-  def write(character: Char): SfxRobot = {
+  def write(character: Char): SfxRobotDsl = {
     delegate.write(character)
     this
   }
 
-  def write(text: String): SfxRobot = {
+  def write(text: String): SfxRobotDsl = {
     delegate.write(text)
     this
   }
@@ -366,7 +369,7 @@ trait SfxRobot {
    * This became necessary because in Scala the signatures of press(KeyCode*) and
    * press(MouseButton*) are equal.
    */
-  def pressKey(keys: KeyCode*): SfxRobot = {
+  def pressKey(keys: KeyCode*): SfxRobotDsl = {
     delegate.press(keys: _*)
     this
   }
@@ -376,7 +379,7 @@ trait SfxRobot {
    * This became necessary because in Scala the signatures of release(KeyCode*) and
    * release(MouseButton*) are equal.
    */
-  def releaseKey(keys: KeyCode*): SfxRobot = {
+  def releaseKey(keys: KeyCode*): SfxRobotDsl = {
     delegate.release(keys: _*)
     this
   }
@@ -390,7 +393,7 @@ trait SfxRobot {
    *
    * @param buttons mouse buttons to press, defaults to primary mouse button.
    */
-  def press(buttons: MouseButton*): SfxRobot = {
+  def press(buttons: MouseButton*): SfxRobotDsl = {
     delegate.press(buttons: _*)
     this
   }
@@ -400,7 +403,7 @@ trait SfxRobot {
    *
    * @param buttons mouse buttons to release, defaults to all pressed mouse buttons.
    */
-  def release(buttons: MouseButton*): SfxRobot = {
+  def release(buttons: MouseButton*): SfxRobotDsl = {
     delegate.release(buttons: _*)
     this
   }
@@ -409,167 +412,167 @@ trait SfxRobot {
   // METHODS FOR CLICKING
   //---------------------------------------------------------------------------------------------
 
-  def clickOn(buttons: MouseButton*): SfxRobot = {
+  def clickOn(buttons: MouseButton*): SfxRobotDsl = {
     delegate.clickOn(buttons: _*)
     this
   }
 
-  def clickOn(pointQuery: PointQuery, buttons: MouseButton*): SfxRobot = {
+  def clickOn(pointQuery: PointQuery, buttons: MouseButton*): SfxRobotDsl = {
     delegate.clickOn(pointQuery, buttons: _*)
     this
   }
 
-  def doubleClickOn(buttons: MouseButton*): SfxRobot = {
+  def doubleClickOn(buttons: MouseButton*): SfxRobotDsl = {
     delegate.doubleClickOn(buttons: _*)
     this
   }
 
-  def doubleClickOn(pointQuery: PointQuery, buttons: MouseButton*): SfxRobot = {
+  def doubleClickOn(pointQuery: PointQuery, buttons: MouseButton*): SfxRobotDsl = {
     delegate.doubleClickOn(pointQuery, buttons: _*)
     this
   }
 
-  def clickOn(x: Double, y: Double, buttons: MouseButton*): SfxRobot = {
+  def clickOn(x: Double, y: Double, buttons: MouseButton*): SfxRobotDsl = {
     delegate.clickOn(x, y, buttons: _*)
     this
   }
 
-  def clickOn(point: Point2D, buttons: MouseButton*): SfxRobot = {
+  def clickOn(point: Point2D, buttons: MouseButton*): SfxRobotDsl = {
     delegate.clickOn(point, buttons: _*)
     this
   }
 
-  def clickOn(bounds: Bounds, buttons: MouseButton*): SfxRobot = {
+  def clickOn(bounds: Bounds, buttons: MouseButton*): SfxRobotDsl = {
     delegate.clickOn(bounds, buttons: _*)
     this
   }
 
-  def clickOn(node: Node, buttons: MouseButton*): SfxRobot = {
+  def clickOn(node: Node, buttons: MouseButton*): SfxRobotDsl = {
     delegate.clickOn(node, buttons: _*)
     this
   }
 
-  def clickOn(scene: Scene, buttons: MouseButton*): SfxRobot = {
+  def clickOn(scene: Scene, buttons: MouseButton*): SfxRobotDsl = {
     delegate.clickOn(scene, buttons: _*)
     this
   }
 
-  def clickOn(window: Window, buttons: MouseButton*): SfxRobot = {
+  def clickOn(window: Window, buttons: MouseButton*): SfxRobotDsl = {
     delegate.clickOn(window, buttons: _*)
     this
   }
 
-  def clickOn(query: String, buttons: MouseButton*): SfxRobot = {
+  def clickOn(query: String, buttons: MouseButton*): SfxRobotDsl = {
     delegate.clickOn(query, buttons: _*)
     this
   }
 
-  def clickOn[T <: Node](matcher: Matcher[T], buttons: MouseButton*): SfxRobot = {
+  def clickOn[T <: Node](matcher: Matcher[T], buttons: MouseButton*): SfxRobotDsl = {
     delegate.clickOn(matcher, buttons: _*)
     this
   }
 
-  def clickOn[T <: Node](predicate: T => Boolean, buttons: MouseButton*): SfxRobot = {
+  def clickOn[T <: Node](predicate: T => Boolean, buttons: MouseButton*): SfxRobotDsl = {
     delegate.clickOn(predicate, buttons: _*)
     this
   }
 
-  def doubleClickOn(x: Double, y: Double, buttons: MouseButton*): SfxRobot = {
+  def doubleClickOn(x: Double, y: Double, buttons: MouseButton*): SfxRobotDsl = {
     delegate.doubleClickOn(x, y, buttons: _*)
     this
   }
 
-  def doubleClickOn(point: Point2D, buttons: MouseButton*): SfxRobot = {
+  def doubleClickOn(point: Point2D, buttons: MouseButton*): SfxRobotDsl = {
     delegate.doubleClickOn(point, buttons: _*)
     this
   }
 
-  def doubleClickOn(bounds: Bounds, buttons: MouseButton*): SfxRobot = {
+  def doubleClickOn(bounds: Bounds, buttons: MouseButton*): SfxRobotDsl = {
     delegate.doubleClickOn(bounds, buttons: _*)
     this
   }
 
-  def doubleClickOn(node: Node, buttons: MouseButton*): SfxRobot = {
+  def doubleClickOn(node: Node, buttons: MouseButton*): SfxRobotDsl = {
     delegate.doubleClickOn(node, buttons: _*)
     this
   }
 
-  def doubleClickOn(scene: Scene, buttons: MouseButton*): SfxRobot = {
+  def doubleClickOn(scene: Scene, buttons: MouseButton*): SfxRobotDsl = {
     delegate.doubleClickOn(scene, buttons: _*)
     this
   }
 
-  def doubleClickOn(window: Window, buttons: MouseButton*): SfxRobot = {
+  def doubleClickOn(window: Window, buttons: MouseButton*): SfxRobotDsl = {
     delegate.doubleClickOn(window, buttons: _*)
     this
   }
 
-  def doubleClickOn(query: String, buttons: MouseButton*): SfxRobot = {
+  def doubleClickOn(query: String, buttons: MouseButton*): SfxRobotDsl = {
     delegate.doubleClickOn(query, buttons: _*)
     this
   }
 
-  def doubleClickOn[T <: Node](matcher: Matcher[T], buttons: MouseButton*): SfxRobot = {
+  def doubleClickOn[T <: Node](matcher: Matcher[T], buttons: MouseButton*): SfxRobotDsl = {
     delegate.doubleClickOn(matcher, buttons: _*)
     this
   }
 
-  def doubleClickOn[T <: Node](predicate: T => Boolean, buttons: MouseButton*): SfxRobot = {
+  def doubleClickOn[T <: Node](predicate: T => Boolean, buttons: MouseButton*): SfxRobotDsl = {
     delegate.doubleClickOn(predicate, buttons: _*)
     this
   }
 
-  def rightClickOn(): SfxRobot = {
+  def rightClickOn(): SfxRobotDsl = {
     delegate.clickOn()
     this
   }
 
-  def rightClickOn(pointQuery: PointQuery): SfxRobot = {
+  def rightClickOn(pointQuery: PointQuery): SfxRobotDsl = {
     delegate.clickOn(pointQuery)
     this
   }
 
-  def rightClickOn(x: Double, y: Double): SfxRobot = {
+  def rightClickOn(x: Double, y: Double): SfxRobotDsl = {
     delegate.rightClickOn(x, y)
     this
   }
 
-  def rightClickOn(point: Point2D): SfxRobot = {
+  def rightClickOn(point: Point2D): SfxRobotDsl = {
     delegate.rightClickOn(point)
     this
   }
 
-  def rightClickOn(bounds: Bounds): SfxRobot = {
+  def rightClickOn(bounds: Bounds): SfxRobotDsl = {
     delegate.rightClickOn(bounds)
     this
   }
 
-  def rightClickOn(node: Node): SfxRobot = {
+  def rightClickOn(node: Node): SfxRobotDsl = {
     delegate.rightClickOn(node)
     this
   }
 
-  def rightClickOn(scene: Scene): SfxRobot = {
+  def rightClickOn(scene: Scene): SfxRobotDsl = {
     delegate.rightClickOn(scene)
     this
   }
 
-  def rightClickOn(window: Window): SfxRobot = {
+  def rightClickOn(window: Window): SfxRobotDsl = {
     delegate.rightClickOn(window)
     this
   }
 
-  def rightClickOn(query: String): SfxRobot = {
+  def rightClickOn(query: String): SfxRobotDsl = {
     delegate.rightClickOn(query)
     this
   }
 
-  def rightClickOn[T <: Node](matcher: Matcher[T]): SfxRobot = {
+  def rightClickOn[T <: Node](matcher: Matcher[T]): SfxRobotDsl = {
     delegate.rightClickOn(matcher)
     this
   }
 
-  def rightClickOn[T <: Node](predicate: T => Boolean): SfxRobot = {
+  def rightClickOn[T <: Node](predicate: T => Boolean): SfxRobotDsl = {
     delegate.rightClickOn(predicate)
     this
   }
@@ -578,117 +581,117 @@ trait SfxRobot {
   // METHODS FOR DRAGGING
   //---------------------------------------------------------------------------------------------
 
-  def drag(buttons: MouseButton*): SfxRobot = {
+  def drag(buttons: MouseButton*): SfxRobotDsl = {
     delegate.drag(buttons: _*)
     this
   }
 
-  def drag(pointQuery: PointQuery, buttons: MouseButton*): SfxRobot = {
+  def drag(pointQuery: PointQuery, buttons: MouseButton*): SfxRobotDsl = {
     delegate.drag(pointQuery, buttons: _*)
     this
   }
 
-  def drag(x: Double, y: Double, buttons: MouseButton*): SfxRobot = {
+  def drag(x: Double, y: Double, buttons: MouseButton*): SfxRobotDsl = {
     delegate.drag(x, y, buttons: _*)
     this
   }
 
-  def drag(point: Point2D, buttons: MouseButton*): SfxRobot = {
+  def drag(point: Point2D, buttons: MouseButton*): SfxRobotDsl = {
     delegate.drag(point, buttons: _*)
     this
   }
 
-  def drag(bounds: Bounds, buttons: MouseButton*): SfxRobot = {
+  def drag(bounds: Bounds, buttons: MouseButton*): SfxRobotDsl = {
     delegate.drag(bounds, buttons: _*)
     this
   }
 
-  def drag(node: Node, buttons: MouseButton*): SfxRobot = {
+  def drag(node: Node, buttons: MouseButton*): SfxRobotDsl = {
     delegate.drag(node, buttons: _*)
     this
   }
 
-  def drag(scene: Scene, buttons: MouseButton*): SfxRobot = {
+  def drag(scene: Scene, buttons: MouseButton*): SfxRobotDsl = {
     delegate.drag(scene, buttons: _*)
     this
   }
 
-  def drag(window: Window, buttons: MouseButton*): SfxRobot = {
+  def drag(window: Window, buttons: MouseButton*): SfxRobotDsl = {
     delegate.drag(window, buttons: _*)
     this
   }
 
-  def drag(query: String, buttons: MouseButton*): SfxRobot = {
+  def drag(query: String, buttons: MouseButton*): SfxRobotDsl = {
     delegate.drag(query, buttons: _*)
     this
   }
 
-  def drag[T <: Node](matcher: Matcher[T], buttons: MouseButton*): SfxRobot = {
+  def drag[T <: Node](matcher: Matcher[T], buttons: MouseButton*): SfxRobotDsl = {
     delegate.drag(matcher, buttons: _*)
     this
   }
 
-  def drag[T <: Node](predicate: T => Boolean, buttons: MouseButton*): SfxRobot = {
+  def drag[T <: Node](predicate: T => Boolean, buttons: MouseButton*): SfxRobotDsl = {
     delegate.drag(predicate, buttons: _*)
     this
   }
 
-  def drop(): SfxRobot = {
+  def drop(): SfxRobotDsl = {
     delegate.drop()
     this
   }
 
-  def dropTo(pointQuery: PointQuery): SfxRobot = {
+  def dropTo(pointQuery: PointQuery): SfxRobotDsl = {
     delegate.dropTo(pointQuery)
     this
   }
 
-  def dropBy(x: Double, y: Double): SfxRobot = {
+  def dropBy(x: Double, y: Double): SfxRobotDsl = {
     delegate.dropBy(x, y)
     this
   }
 
-  def dropTo(x: Double, y: Double): SfxRobot = {
+  def dropTo(x: Double, y: Double): SfxRobotDsl = {
     delegate.dropTo(x, y)
     this
   }
 
-  def dropTo(point: Point2D): SfxRobot = {
+  def dropTo(point: Point2D): SfxRobotDsl = {
     delegate.dropTo(point)
     this
   }
 
-  def dropTo(bounds: Bounds): SfxRobot = {
+  def dropTo(bounds: Bounds): SfxRobotDsl = {
     delegate.dropTo(bounds)
     this
   }
 
-  def dropTo(node: Node): SfxRobot = {
+  def dropTo(node: Node): SfxRobotDsl = {
     delegate.dropTo(node)
     this
   }
 
-  def dropTo(scene: Scene): SfxRobot = {
+  def dropTo(scene: Scene): SfxRobotDsl = {
     delegate.dropTo(scene)
     this
   }
 
-  def dropTo(window: Window): SfxRobot = {
+  def dropTo(window: Window): SfxRobotDsl = {
     delegate.dropTo(window)
     this
   }
 
-  def dropTo(query: String): SfxRobot = {
+  def dropTo(query: String): SfxRobotDsl = {
     delegate.dropTo(query)
     this
   }
 
-  def dropTo[T <: Node](matcher: Matcher[T]): SfxRobot = {
+  def dropTo[T <: Node](matcher: Matcher[T]): SfxRobotDsl = {
     delegate.dropTo(matcher)
     this
   }
 
-  def dropTo[T <: Node](predicate: T => Boolean): SfxRobot = {
+  def dropTo[T <: Node](predicate: T => Boolean): SfxRobotDsl = {
     delegate.dropTo(predicate)
     this
   }
@@ -697,57 +700,57 @@ trait SfxRobot {
   // METHODS FOR MOVING
   //---------------------------------------------------------------------------------------------
 
-  def moveTo(pointQuery: PointQuery): SfxRobot = {
+  def moveTo(pointQuery: PointQuery): SfxRobotDsl = {
     delegate.moveTo(pointQuery)
     this
   }
 
-  def moveBy(x: Double, y: Double): SfxRobot = {
+  def moveBy(x: Double, y: Double): SfxRobotDsl = {
     delegate.moveBy(x, y)
     this
   }
 
-  def moveTo(x: Double, y: Double): SfxRobot = {
+  def moveTo(x: Double, y: Double): SfxRobotDsl = {
     delegate.moveTo(x, y)
     this
   }
 
-  def moveTo(point: Point2D): SfxRobot = {
+  def moveTo(point: Point2D): SfxRobotDsl = {
     delegate.moveTo(point)
     this
   }
 
-  def moveTo(bounds: Bounds): SfxRobot = {
+  def moveTo(bounds: Bounds): SfxRobotDsl = {
     delegate.moveTo(bounds)
     this
   }
 
-  def moveTo(node: Node): SfxRobot = {
+  def moveTo(node: Node): SfxRobotDsl = {
     delegate.moveTo(node)
     this
   }
 
-  def moveTo(scene: Scene): SfxRobot = {
+  def moveTo(scene: Scene): SfxRobotDsl = {
     delegate.moveTo(scene)
     this
   }
 
-  def moveTo(window: Window): SfxRobot = {
+  def moveTo(window: Window): SfxRobotDsl = {
     delegate.moveTo(window)
     this
   }
 
-  def moveTo(query: String): SfxRobot = {
+  def moveTo(query: String): SfxRobotDsl = {
     delegate.moveTo(query)
     this
   }
 
-  def moveTo[T <: Node](matcher: Matcher[T]): SfxRobot = {
+  def moveTo[T <: Node](matcher: Matcher[T]): SfxRobotDsl = {
     delegate.moveTo(matcher)
     this
   }
 
-  def moveTo[T <: Node](predicate: T => Boolean): SfxRobot = {
+  def moveTo[T <: Node](predicate: T => Boolean): SfxRobotDsl = {
     delegate.moveTo(predicate)
     this
   }
@@ -756,12 +759,12 @@ trait SfxRobot {
   // METHODS FOR SCROLLING
   //---------------------------------------------------------------------------------------------
 
-  def scroll(amount: Int, direction: VerticalDirection): SfxRobot = {
+  def scroll(amount: Int, direction: VerticalDirection): SfxRobotDsl = {
     delegate.scroll(amount, direction)
     this
   }
 
-  def scroll(direction: VerticalDirection): SfxRobot = {
+  def scroll(direction: VerticalDirection): SfxRobotDsl = {
     scroll(1, direction)
   }
 

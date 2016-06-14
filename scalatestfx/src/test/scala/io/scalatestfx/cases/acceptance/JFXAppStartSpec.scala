@@ -57,7 +57,7 @@ class JFXAppStartSpec extends AcceptanceSpec
 
   "JFXappFixture mixed in in spec" should "start an simple JFXApp" in {
 
-    window("Hallo World!").isShowing() shouldBe true
+    window("Hallo World!").isShowing shouldBe true
 
   }
 
