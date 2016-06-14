@@ -8,7 +8,7 @@ import scala.xml._
 // JAR_BUILT_BY      - Name to be added to Jar metadata field "Built-By" (defaults to System.getProperty("user.name")
 //
 
-val scalaTestFxVersion = "0.0.1"
+val scalaTestFxVersion = "0.0.2-SNAPSHOT"
 val versionTagDir = if (scalaTestFxVersion.endsWith("SNAPSHOT")) "master" else "v" + scalaTestFxVersion
 
 lazy val metaInfo = Seq(
