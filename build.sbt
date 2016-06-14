@@ -8,8 +8,15 @@ import scala.xml._
 // JAR_BUILT_BY      - Name to be added to Jar metadata field "Built-By" (defaults to System.getProperty("user.name")
 //
 
-val scalaTestFxVersion = "0.1.0-SNAPSHOT"
+val scalaTestFxVersion = "0.0.1"
 val versionTagDir = if (scalaTestFxVersion.endsWith("SNAPSHOT")) "master" else "v" + scalaTestFxVersion
+
+lazy val metaInfo = Seq(
+  organization := "io.scalatestfx",
+  homepage := Some(new URL("https://github.com/haraldmaida/ScalaTestFX")),
+  startYear := Some(2016),
+  licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
+)
 
 // ScalaTestFX project
 lazy val scalatestfx = Project(
@@ -17,6 +24,7 @@ lazy val scalatestfx = Project(
   base = file("scalatestfx"),
   settings = scalaTestFxSettings ++ Seq(
     description := "The ScalaTestFX Framework",
+    publishArtifact := true,
     fork in run := true,
     libraryDependencies ++= Seq(
       scalatest,
@@ -26,18 +34,18 @@ lazy val scalatestfx = Project(
   )
 )
 
-// ScalaFX Demos project
+// ScalaTestFX Demos project
 lazy val scalatestfxDemos = Project(
   id = "scalatestfx-demos",
   base = file("scalatestfx-demos"),
   settings = scalaTestFxSettings ++ Seq(
     description := "The ScalaTestFX Demonstrations",
+    publishArtifact := false,
     fork in run := true,
     javaOptions ++= Seq(
       "-Xmx512M",
       "-Djavafx.verbose"
     ),
-    publishArtifact := false,
     libraryDependencies ++= Seq(
       scalafx
     )
@@ -57,9 +65,12 @@ lazy val sonatypeNexusStaging = "Sonatype Nexus Staging" at "https://oss.sonatyp
 // e.g., 2.11.0-SNAPSHOT
 resolvers += sonatypeNexusSnapshots
 
+// Root project is never published
+publishArtifact := false
+publishMavenStyle := true
+
 // Common settings
 lazy val scalaTestFxSettings = Seq(
-  organization := "io.scalatestfx",
   version := scalaTestFxVersion,
   crossScalaVersions := Seq("2.11.8", "2.12.0-M4"),
   scalaVersion <<= crossScalaVersions { versions => versions.head },
@@ -74,13 +85,14 @@ lazy val scalaTestFxSettings = Seq(
     "-Xlint:deprecation"
   ),
   autoAPIMappings := true,
-  manifestSetting,
-  publishSetting,
   fork in Test := true,
   parallelExecution in Test := false,
+  manifestSetting,
+  publishMavenStyle := true,
+  publishArtifact in Test := false,
   resolvers += sonatypeNexusSnapshots,
   shellPrompt in ThisBuild := { state => "sbt:" + Project.extract(state).currentRef.project + "> " }
-) ++ mavenCentralSettings
+) ++ mavenCentralSettings ++ bintraySettings
 
 lazy val manifestSetting = packageOptions <+= (name, version, organization) map {
   (title, version, vendor) =>
@@ -98,33 +110,27 @@ lazy val manifestSetting = packageOptions <+= (name, version, organization) map 
     )
 }
 
-lazy val publishSetting = publishTo <<= version {
-  version: String =>
-    if (version.trim.endsWith("SNAPSHOT"))
-      Some(sonatypeNexusSnapshots)
-    else
-      Some(sonatypeNexusStaging)
-}
+lazy val bintraySettings = Seq(
+  bintrayReleaseOnPublish := false,
+  bintrayOrganization in bintray := None
+)
 
 // Metadata needed by Maven Central
 // See also http://maven.apache.org/pom.html#Developers
-lazy val mavenCentralSettings = Seq(
-  homepage := Some(new URL("https://github.com/haraldmaida/ScalaTestFX")),
-  startYear := Some(2016),
-  licenses := Seq(("Apache License 2.0", new URL("https://github.com/haraldmaida/ScalaTestFX/LICENSE"))),
+lazy val mavenCentralSettings = metaInfo ++ Seq(
   pomExtra <<= (pomExtra, name, description) {
     (pom, name, desc) => pom ++ Group(
       <scm>
         <url>https://github.com/haraldmaida/ScalaTestFX</url>
         <connection>scm:git:https://github.com/haraldmaida/ScalaTestFX.git</connection>
       </scm>
-        <developers>
-          <developer>
-            <id>haraldmaida</id>
-            <name>Harald Maida</name>
-            <url>https://github.com/haraldmaida</url>
-          </developer>
-        </developers>
+      <developers>
+        <developer>
+          <id>haraldmaida</id>
+          <name>Harald Maida</name>
+          <url>https://github.com/haraldmaida</url>
+        </developer>
+      </developers>
     )
   }
 )
