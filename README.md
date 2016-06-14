@@ -3,6 +3,7 @@
 Write TestFX tests using ScalaTest specifications
 
 [![Build Status](https://travis-ci.org/haraldmaida/ScalaTestFX.svg?branch=master)](https://travis-ci.org/haraldmaida/ScalaTestFX)
+[![Download](https://api.bintray.com/packages/haraldmaida/maven/scalatestfx/images/download.svg)](https://bintray.com/haraldmaida/maven/scalatestfx/_latestVersion)
 
 ## License
 
