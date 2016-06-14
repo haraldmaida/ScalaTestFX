@@ -1,6 +1,4 @@
-# ScalaTestFX
-
-[![Join the chat at https://gitter.im/haraldmaida/ScalaTestFX](https://badges.gitter.im/haraldmaida/ScalaTestFX.svg)](https://gitter.im/haraldmaida/ScalaTestFX?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# ScalaTestFX  [![Join the chat at https://gitter.im/haraldmaida/ScalaTestFX](https://badges.gitter.im/haraldmaida/ScalaTestFX.svg)](https://gitter.im/haraldmaida/ScalaTestFX?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Write TestFX tests using ScalaTest specifications
 
