@@ -1,4 +1,4 @@
-# ScalaTestFX &nbsp;&nbsp;&nbsp; [![Bintray JCenter](https://img.shields.io/bintray/v/haraldmaida/maven/scalatestfx.svg?label=release&color=blue&style=flat-square)](https://bintray.com/haraldmaida/maven/scalatestfx)
+# ScalaTestFX &nbsp;&nbsp;&nbsp; [![Bintray JCenter](https://img.shields.io/bintray/v/haraldmaida/maven/scalatestfx.svg?label=release&style=flat-square)](https://bintray.com/haraldmaida/maven/scalatestfx)
 
 Write TestFX tests using ScalaTest specifications
 
