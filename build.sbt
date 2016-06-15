@@ -8,7 +8,10 @@ import scala.xml._
 // JAR_BUILT_BY      - Name to be added to Jar metadata field "Built-By" (defaults to System.getProperty("user.name")
 //
 
+name := "scalatestfx-build"
+
 val scalaTestFxVersion = "0.0.2-SNAPSHOT"
+
 val versionTagDir = if (scalaTestFxVersion.endsWith("SNAPSHOT")) "master" else "v" + scalaTestFxVersion
 
 lazy val metaInfo = Seq(
@@ -64,6 +67,10 @@ lazy val sonatypeNexusStaging = "Sonatype Nexus Staging" at "https://oss.sonatyp
 // Add snapshots to root project to enable compilation with Scala SNAPSHOT compiler,
 // e.g., 2.11.0-SNAPSHOT
 resolvers += sonatypeNexusSnapshots
+
+enablePlugins(
+  GitBranchPrompt
+)
 
 // Root project is never published
 publishArtifact := false
