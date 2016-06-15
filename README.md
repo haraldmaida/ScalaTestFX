@@ -1,4 +1,7 @@
-# ScalaTestFX &nbsp;&nbsp;&nbsp;&nbsp; [![Bintray JCenter](https://img.shields.io/bintray/v/haraldmaida/maven/scalatestfx.svg?style=flat-square)](https://bintray.com/haraldmaida/maven/scalatestfx) [![Maven Central](https://img.shields.io/maven-central/v/io.scalatestfx/scalatestfx.svg?style=flat-square)](https://search.maven.org/#search|ga|1|io.scalatestfx) [![Build Status](https://img.shields.io/travis/haraldmaida/ScalaTestFX/master.svg?style=flat-square)](https://travis-ci.org/haraldmaida/ScalaTestFX) [![Join the chat at https://gitter.im/haraldmaida/ScalaTestFX](https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square)](https://gitter.im/haraldmaida/ScalaTestFX?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# ScalaTestFX &nbsp;&nbsp;&nbsp;&nbsp; [![Bintray JCenter](https://img.shields.io/bintray/v/haraldmaida/maven/scalatestfx.svg?label=release&color=blue&style=flat-square)](https://bintray.com/haraldmaida/maven/scalatestfx) [![Join the chat at https://gitter.im/haraldmaida/ScalaTestFX](https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square)](https://gitter.im/haraldmaida/ScalaTestFX?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+[![Build Status](https://img.shields.io/travis/haraldmaida/ScalaTestFX/master.svg?style=flat-square)](https://travis-ci.org/haraldmaida/ScalaTestFX)
+[![License](http://img.shields.io/:license-Apache%202.0-red.svg?style=flat-square)](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 Write TestFX tests using ScalaTest specifications
 
