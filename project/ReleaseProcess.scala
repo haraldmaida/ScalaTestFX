@@ -5,7 +5,6 @@ import sbtrelease._
 import sbtrelease.ReleasePlugin.autoImport._
 import sbtrelease.ReleasePlugin.autoImport.ReleaseKeys._
 import sbtrelease.ReleaseStateTransformations._
-import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
 
 //
 //defines the release process for the sbt-release plugin
@@ -43,10 +42,10 @@ object ReleaseProcess {
 //      commitReleaseVersion,
       tagRelease,
       publishArtifacts,
+	  ReleaseStep(releaseStepCommand("makeSite")),
+	  ReleaseStep(releaseStepCommand("ghpagesPushSite")),
 //      setNextVersion,
 //      commitNextVersion,
-	  ReleaseStep(releaseStepCommand("makeSite")),
-	  ReleaseStep(releaseStepTask(pushSite)),
       pushChanges
     )
 
