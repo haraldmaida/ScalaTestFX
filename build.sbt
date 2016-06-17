@@ -33,6 +33,8 @@ lazy val scalatestfx = Project(
       scalafx
     )
   )
+).enablePlugins(
+  SiteScaladocPlugin
 )
 
 // ScalaTestFX Demos project
@@ -79,6 +81,7 @@ publishArtifact := false
 enablePlugins(
   GitBranchPrompt,
   GitVersioning
+//  JekyllPlugin
 )
 
 // Common settings
@@ -170,3 +173,10 @@ lazy val mavenCentralSettings = projectInfo ++ Seq(
     )
   }
 )
+//
+// Project website
+//
+//sourceDirectory in Jekyll := baseDirectory.value / "website"
+
+ghpages.settings
+git.remoteRepo := "git@github.com:haraldmaida/ScalaTestFX.git"
