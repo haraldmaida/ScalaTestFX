@@ -23,7 +23,7 @@ scalaVersion <<= crossScalaVersions { versions => versions.head }
 lazy val scalatestfx = Project(
   id = "scalatestfx",
   base = file("scalatestfx"),
-  settings = commonSettings ++ Seq(
+  settings = commonSettings ++ ghpages.settings ++ Seq(
     description := "The ScalaTestFX Framework",
     publishArtifact := true,
     fork in run := true,
@@ -102,8 +102,7 @@ lazy val commonSettings = Seq(
   parallelExecution in Test := false,
   manifestSetting,
   publishArtifact in Test := false,
-  resolvers += sonatypeNexusSnapshots
-//  shellPrompt in ThisBuild := { state => "sbt:" + Project.extract(state).currentRef.project + "> " }
+  git.remoteRepo := "git@github.com:haraldmaida/ScalaTestFX.git"
 ) ++ mavenCentralSettings ++ bintraySettings
 
 lazy val manifestSetting = packageOptions <+= (name, version, organization) map {
@@ -177,6 +176,3 @@ lazy val mavenCentralSettings = projectInfo ++ Seq(
 // Project website
 //
 //sourceDirectory in Jekyll := baseDirectory.value / "website"
-
-ghpages.settings
-git.remoteRepo := "git@github.com:haraldmaida/ScalaTestFX.git"
