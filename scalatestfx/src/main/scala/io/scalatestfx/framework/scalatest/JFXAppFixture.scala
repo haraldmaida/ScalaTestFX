@@ -15,23 +15,27 @@
  */
 package io.scalatestfx.framework.scalatest
 
+import javafx.{stage => jfxst}
+import io.scalatestfx.api.Java8Conversions._
 import org.scalatest.Outcome
 import org.scalatest.TestSuite
 import org.scalatest.TestSuiteMixin
 import org.testfx.api.FxToolkit
 import scalafx.application.JFXApp.PrimaryStage
 import scalafx.application.JFXApp
-import io.scalatestfx.api.Java8Conversions._
+import scalafx.stage.Stage
 
 trait JFXAppFixture extends TestSuiteMixin { self: TestSuite =>
 
-  /**
-   * Important: The {#stage} must be overridden as def or lazy val.
-   * Otherwise a NullPointerException occurs.
-   */
-  def stage(): PrimaryStage
+  def start(stage: Stage): Unit
 
-  def stopApp(): Unit = {}
+  def init() {
+    FxToolkit.registerStage(() => {
+      new jfxst.Stage()
+    })
+  }
+
+  def stop(): Unit = {}
 
   abstract override def withFixture(test: NoArgTest): Outcome = {
     val superWithFixture = super.withFixture _   // required to access to super withFixture method from within runnable for a trait

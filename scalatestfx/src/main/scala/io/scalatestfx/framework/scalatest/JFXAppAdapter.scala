@@ -16,28 +16,27 @@
 package io.scalatestfx.framework.scalatest
 
 import javafx.{stage => jfxst}
+import io.scalatestfx.api.Java8Conversions._
 import org.testfx.api.FxToolkit
 import scalafx.application.JFXApp
-import io.scalatestfx.api.Java8Conversions._
+import scalafx.stage.Stage
 
 class JFXAppAdapter(
     val jfxAppFixture: JFXAppFixture
     ) extends javafx.application.Application {
 
   override def init() {
-    FxToolkit.registerStage(() => {
-        JFXApp.Stage = new jfxst.Stage()
-        jfxAppFixture.stage.delegate
-    })
+    jfxAppFixture.init()
   }
 
   override def start(stage: jfxst.Stage) {
-    stage.show()
+    JFXApp.Stage = stage
+    jfxAppFixture.start(new JFXApp.PrimaryStage)
   }
 
   override def stop() {
     FxToolkit.hideStage()
-    jfxAppFixture.stopApp
+    jfxAppFixture.stop()
   }
 
 }

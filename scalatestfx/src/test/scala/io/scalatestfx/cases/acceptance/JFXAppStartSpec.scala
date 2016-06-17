@@ -23,11 +23,11 @@ import io.scalatestfx.testing.AcceptanceSpec
 import io.scalatestfx.testing.UiTest
 import org.testfx.api.FxAssert.verifyThat
 import org.testfx.matcher.base.NodeMatchers.hasText
-import scalafx.application.JFXApp
-import scalafx.application.JFXApp.PrimaryStage
 import scalafx.Includes._
+import scalafx.application.JFXApp
 import scalafx.event.ActionEvent
 import scalafx.scene.Scene
+import scalafx.stage.Stage
 import scalafx.scene.control.Button
 import scalafx.scene.layout.StackPane
 
@@ -37,11 +37,11 @@ class JFXAppStartSpec extends AcceptanceSpec
     with JFXAppFixture
 {
 
-  override lazy val stage: PrimaryStage = new JFXApp.PrimaryStage with ViewObject {
-    title = "Hallo World!"
-    width = 200
-    height = 200
-    scene = new Scene {
+  override def start(stage: Stage) {
+    stage.title = "Hallo World!"
+    stage.width = 200
+    stage.height = 200
+    stage.scene = new Scene {
       content = new StackPane {
         children = Seq(
           new Button {
@@ -53,6 +53,7 @@ class JFXAppStartSpec extends AcceptanceSpec
         )
       }
     }
+    stage.show
   }
 
   "JFXappFixture mixed in in spec" should "start an simple JFXApp" in {

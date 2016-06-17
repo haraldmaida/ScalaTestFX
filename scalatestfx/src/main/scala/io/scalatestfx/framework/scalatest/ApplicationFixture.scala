@@ -20,12 +20,11 @@ import org.scalatest.Outcome
 import org.scalatest.TestSuite
 import org.scalatest.TestSuiteMixin
 import org.testfx.api.FxToolkit
-import javafx.scene.Parent
 import io.scalatestfx.api.ImplicitConversions._
 
 trait ApplicationFixture extends TestSuiteMixin { self: TestSuite =>
 
-  def start(start: Stage): Unit
+  def start(stage: Stage): Unit
 
   def init() {
     FxToolkit.registerStage(() => {
