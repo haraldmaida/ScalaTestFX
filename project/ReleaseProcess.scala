@@ -44,6 +44,8 @@ object ReleaseProcess {
       publishArtifacts,
 //      setNextVersion,
 //      commitNextVersion,
+	  ReleaseStep(releaseStepTask(makeSite),
+	  ReleaseStep(releaseStepTask(ghpagesPushSite),
       pushChanges
     )
 
