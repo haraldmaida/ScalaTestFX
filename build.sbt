@@ -1,22 +1,17 @@
 import java.net.URL
-
 import scala.xml._
+import sbtrelease._
 
 //
 // Environment variables used by the build:
-// GRAPHVIZ_DOT_PATH - Full path to Graphviz dot utility. If not defined Scaladocs will be build without diagrams.
 // JAR_BUILT_BY      - Name to be added to Jar metadata field "Built-By" (defaults to System.getProperty("user.name")
 //
 
 name := "scalatestfx-build"
 
-val scalaTestFxVersion = "0.0.2-SNAPSHOT"
-
-val versionTagDir = if (scalaTestFxVersion.endsWith("SNAPSHOT")) "master" else "v" + scalaTestFxVersion
-
-lazy val metaInfo = Seq(
+val projectInfo = Seq(
   organization := "io.scalatestfx",
-  homepage := Some(new URL("https://github.com/haraldmaida/ScalaTestFX")),
+  homepage := Some(url("https://github.com/haraldmaida/ScalaTestFX")),
   startYear := Some(2016),
   licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
 )
@@ -25,7 +20,7 @@ lazy val metaInfo = Seq(
 lazy val scalatestfx = Project(
   id = "scalatestfx",
   base = file("scalatestfx"),
-  settings = scalaTestFxSettings ++ Seq(
+  settings = commonSettings ++ Seq(
     description := "The ScalaTestFX Framework",
     publishArtifact := true,
     fork in run := true,
@@ -41,7 +36,7 @@ lazy val scalatestfx = Project(
 lazy val scalatestfxDemos = Project(
   id = "scalatestfx-demos",
   base = file("scalatestfx-demos"),
-  settings = scalaTestFxSettings ++ Seq(
+  settings = commonSettings ++ Seq(
     description := "The ScalaTestFX Demonstrations",
     publishArtifact := false,
     fork in run := true,
@@ -55,12 +50,16 @@ lazy val scalatestfxDemos = Project(
   )
 ) dependsOn (scalatestfx % "compile;test->test")
 
+//
 // Dependencies
+//
 lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.0-RC2"
 lazy val testfxCore = "org.testfx" % "testfx-core" % "4.0.4-alpha"
 lazy val scalafx = "org.scalafx" %% "scalafx" % "8.0.92-R10"
 
+//
 // Resolvers
+//
 lazy val sonatypeNexusSnapshots = "Sonatype Nexus Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 lazy val sonatypeNexusStaging = "Sonatype Nexus Staging" at "https://oss.sonatype.org/service/local/staging/deploy/maven2"
 
@@ -68,24 +67,27 @@ lazy val sonatypeNexusStaging = "Sonatype Nexus Staging" at "https://oss.sonatyp
 // e.g., 2.11.0-SNAPSHOT
 resolvers += sonatypeNexusSnapshots
 
-enablePlugins(
-  GitBranchPrompt
-)
-
 // Root project is never published
 publishArtifact := false
-publishMavenStyle := true
+
+//
+// Plugins
+//
+enablePlugins(
+  GitBranchPrompt,
+  GitVersioning
+)
 
 // Common settings
-lazy val scalaTestFxSettings = Seq(
-  version := scalaTestFxVersion,
+lazy val commonSettings = Seq(
+//  version := buildVersion,
   crossScalaVersions := Seq("2.11.8", "2.12.0-M4"),
   scalaVersion <<= crossScalaVersions { versions => versions.head },
   scalacOptions ++= Seq("-unchecked", "-deprecation", "-Xcheckinit", "-encoding", "utf8", "-feature"),
-  scalacOptions in(Compile, doc) ++= Opts.doc.title("ScalaTestFX API"),
-  scalacOptions in(Compile, doc) ++= Opts.doc.version(scalaTestFxVersion),
-  scalacOptions in(Compile, doc) += s"-doc-external-doc:${scalaInstance.value.libraryJar}#http://www.scala-lang.org/api/${scalaVersion.value}/",
-  scalacOptions in(Compile, doc) ++= Seq("-doc-footer", s"ScalaTestFX API v.$scalaTestFxVersion"),
+//  scalacOptions in(Compile, doc) ++= Opts.doc.title("ScalaTestFX API"),
+//  scalacOptions in(Compile, doc) ++= Opts.doc.version(buildVersion),
+//  scalacOptions in(Compile, doc) += s"-doc-external-doc:${scalaInstance.value.libraryJar}#http://www.scala-lang.org/api/${scalaVersion.value}/",
+//  scalacOptions in(Compile, doc) ++= Seq("-doc-footer", s"ScalaTestFX API v.$buildVersion"),
   javacOptions ++= Seq(
     "-target", "1.8",
     "-source", "1.8",
@@ -95,10 +97,8 @@ lazy val scalaTestFxSettings = Seq(
   fork in Test := true,
   parallelExecution in Test := false,
   manifestSetting,
-  publishMavenStyle := true,
-  publishArtifact in Test := false,
-  resolvers += sonatypeNexusSnapshots,
-  shellPrompt in ThisBuild := { state => "sbt:" + Project.extract(state).currentRef.project + "> " }
+  resolvers += sonatypeNexusSnapshots
+//  shellPrompt in ThisBuild := { state => "sbt:" + Project.extract(state).currentRef.project + "> " }
 ) ++ mavenCentralSettings ++ bintraySettings
 
 lazy val manifestSetting = packageOptions <+= (name, version, organization) map {
@@ -117,14 +117,41 @@ lazy val manifestSetting = packageOptions <+= (name, version, organization) map 
     )
 }
 
+//
+// Git Versioning
+//
+git.baseVersion := "0.0.0-alpha"
+val VersionTagRegex = "^v([0-9]+.[0-9]+.[0-9]+)(-.*)?$".r
+git.gitTagToVersionNumber := {
+  case VersionTagRegex(v,"") => Some(v)
+  case VersionTagRegex(v,s) => Some(s"$v$s")  
+  case _ => None
+}
+git.useGitDescribe := true
+
+//
+// Release Process
+//
+releaseCrossBuild := true
+releaseProcess := ReleaseProcess.steps 
+releasePublishArtifactsAction := PgpKeys.publishSigned.value
+// use next version instead of current developer version
+releaseVersion <<= (releaseVersionBump)(bumper => {
+    ver => Version(ver).map(_.withoutQualifier).map(_.bump(bumper).string).getOrElse(versionFormatError)
+})
+
+//
+// Publishing
+//
 lazy val bintraySettings = Seq(
+  publishMavenStyle := true,
   bintrayReleaseOnPublish := false,
   bintrayOrganization in bintray := None
 )
 
 // Metadata needed by Maven Central
 // See also http://maven.apache.org/pom.html#Developers
-lazy val mavenCentralSettings = metaInfo ++ Seq(
+lazy val mavenCentralSettings = projectInfo ++ Seq(
   pomExtra <<= (pomExtra, name, description) {
     (pom, name, desc) => pom ++ Group(
       <scm>
