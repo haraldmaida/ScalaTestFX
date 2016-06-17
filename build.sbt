@@ -16,6 +16,9 @@ val projectInfo = Seq(
   licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
 )
 
+crossScalaVersions := Seq("2.11.8", "2.12.0-M4")
+scalaVersion <<= crossScalaVersions { versions => versions.head }
+
 // ScalaTestFX project
 lazy val scalatestfx = Project(
   id = "scalatestfx",
@@ -81,8 +84,6 @@ enablePlugins(
 // Common settings
 lazy val commonSettings = Seq(
 //  version := buildVersion,
-  crossScalaVersions := Seq("2.11.8", "2.12.0-M4"),
-  scalaVersion <<= crossScalaVersions { versions => versions.head },
   scalacOptions ++= Seq("-unchecked", "-deprecation", "-Xcheckinit", "-encoding", "utf8", "-feature"),
 //  scalacOptions in(Compile, doc) ++= Opts.doc.title("ScalaTestFX API"),
 //  scalacOptions in(Compile, doc) ++= Opts.doc.version(buildVersion),
@@ -97,6 +98,7 @@ lazy val commonSettings = Seq(
   fork in Test := true,
   parallelExecution in Test := false,
   manifestSetting,
+  publishArtifact in Test := false,
   resolvers += sonatypeNexusSnapshots
 //  shellPrompt in ThisBuild := { state => "sbt:" + Project.extract(state).currentRef.project + "> " }
 ) ++ mavenCentralSettings ++ bintraySettings
