@@ -120,7 +120,7 @@ lazy val manifestSetting = packageOptions <+= (name, version, organization) map 
 //
 // Git Versioning
 //
-git.baseVersion := "0.0.0-alpha"
+git.baseVersion := "0.0.0"
 val VersionTagRegex = "^v([0-9]+.[0-9]+.[0-9]+)(-.*)?$".r
 git.gitTagToVersionNumber := {
   case VersionTagRegex(v,"") => Some(v)
