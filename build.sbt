@@ -16,8 +16,8 @@ val projectInfo = Seq(
   licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
 )
 
-crossScalaVersions := Seq("2.11.8", "2.12.0-M4")
-scalaVersion <<= crossScalaVersions { versions => versions.head }
+crossScalaVersions := Seq("2.11.8", "2.12.0-RC1")
+scalaVersion := crossScalaVersions.value.head
 
 // ScalaTestFX project
 lazy val scalatestfx = Project(
@@ -58,9 +58,9 @@ lazy val scalatestfxDemos = Project(
 //
 // Dependencies
 //
-lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.0-RC2"
+lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.0"
 lazy val testfxCore = "org.testfx" % "testfx-core" % "4.0.4-alpha"
-lazy val scalafx = "org.scalafx" %% "scalafx" % "8.0.92-R10"
+lazy val scalafx = "org.scalafx" %% "scalafx" % "8.0.102-R11"
 
 //
 // Resolvers
@@ -105,19 +105,18 @@ lazy val commonSettings = Seq(
   git.remoteRepo := "git@github.com:haraldmaida/ScalaTestFX.git"
 ) ++ mavenCentralSettings ++ bintraySettings
 
-lazy val manifestSetting = packageOptions <+= (name, version, organization) map {
-  (title, version, vendor) =>
+lazy val manifestSetting = packageOptions += {
     Package.ManifestAttributes(
       "Created-By" -> "Simple Build Tool",
       "Built-By" -> Option(System.getenv("JAR_BUILT_BY")).getOrElse(System.getProperty("user.name")),
       "Build-Jdk" -> System.getProperty("java.version"),
-      "Specification-Title" -> title,
-      "Specification-Version" -> version,
-      "Specification-Vendor" -> vendor,
-      "Implementation-Title" -> title,
-      "Implementation-Version" -> version,
-      "Implementation-Vendor-Id" -> vendor,
-      "Implementation-Vendor" -> vendor
+      "Specification-Title" -> name.value,
+      "Specification-Version" -> version.value,
+      "Specification-Vendor" -> organization.value,
+      "Implementation-Title" -> name.value,
+      "Implementation-Version" -> version.value,
+      "Implementation-Vendor-Id" -> organization.value,
+      "Implementation-Vendor" -> organization.value
     )
 }
 
@@ -140,9 +139,9 @@ releaseCrossBuild := true
 releaseProcess := ReleaseProcess.steps 
 releasePublishArtifactsAction := PgpKeys.publishSigned.value
 // use next version instead of current developer version
-releaseVersion <<= (releaseVersionBump)(bumper => {
-    ver => Version(ver).map(_.withoutQualifier).map(_.bump(bumper).string).getOrElse(versionFormatError)
-})
+releaseVersion := {
+    ver => Version(ver).map(_.withoutQualifier).map(_.bump(releaseVersionBump.value).string).getOrElse(versionFormatError)
+}
 
 //
 // Publishing
@@ -156,8 +155,8 @@ lazy val bintraySettings = Seq(
 // Metadata needed by Maven Central
 // See also http://maven.apache.org/pom.html#Developers
 lazy val mavenCentralSettings = projectInfo ++ Seq(
-  pomExtra <<= (pomExtra, name, description) {
-    (pom, name, desc) => pom ++ Group(
+  pomExtra := {
+    pomExtra.value ++ Group(
       <scm>
         <url>https://github.com/haraldmaida/ScalaTestFX</url>
         <connection>scm:git:https://github.com/haraldmaida/ScalaTestFX.git</connection>
