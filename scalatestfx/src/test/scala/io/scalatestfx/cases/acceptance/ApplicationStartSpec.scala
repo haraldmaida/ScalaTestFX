@@ -19,7 +19,6 @@ import scala.concurrent.duration._
 import io.scalatestfx.api.SfxRobot
 import io.scalatestfx.framework.scalatest.ApplicationFixture
 import io.scalatestfx.testing.AcceptanceSpec
-import io.scalatestfx.testing.UiTest
 import org.testfx.api.FxAssert.verifyThat
 import org.testfx.matcher.base.NodeMatchers.hasText
 import javafx.stage.Stage
@@ -29,7 +28,6 @@ import javafx.scene.layout.StackPane
 import scalafx.Includes._
 import scalafx.event.ActionEvent
 
-@UiTest
 class ApplicationStartSpec extends AcceptanceSpec
     with SfxRobot
     with ApplicationFixture

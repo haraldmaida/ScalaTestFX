@@ -17,21 +17,17 @@ package io.scalatestfx.cases.acceptance
 
 import scala.concurrent.duration._
 import io.scalatestfx.api.SfxRobot
-import io.scalatestfx.api.ViewObject
 import io.scalatestfx.framework.scalatest.JFXAppFixture
 import io.scalatestfx.testing.AcceptanceSpec
-import io.scalatestfx.testing.UiTest
 import org.testfx.api.FxAssert.verifyThat
 import org.testfx.matcher.base.NodeMatchers.hasText
 import scalafx.Includes._
-import scalafx.application.JFXApp
 import scalafx.event.ActionEvent
 import scalafx.scene.Scene
 import scalafx.stage.Stage
 import scalafx.scene.control.Button
 import scalafx.scene.layout.StackPane
 
-@UiTest
 class JFXAppStartSpec extends AcceptanceSpec
     with SfxRobot
     with JFXAppFixture

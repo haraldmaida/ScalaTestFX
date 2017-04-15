@@ -28,17 +28,15 @@ import javafx.scene.input.KeyCodeCombination
 import javafx.scene.input.MouseButton
 import javafx.stage.Screen
 import javafx.stage.Window
+import scala.collection.JavaConverters._
 import scala.concurrent.duration._
 import org.hamcrest.Matcher
 import org.testfx.api.FxRobot
+import org.testfx.api.FxRobotInterface
 import org.testfx.service.query.BoundsQuery
 import org.testfx.service.query.NodeQuery
 import org.testfx.service.query.PointQuery
-import org.testfx.util.BoundsQueryUtils
-import scala.collection.JavaConversions._
 import io.scalatestfx.api.GuavaConversions._
-import org.testfx.api.FxRobotInterface
-import org.testfx.api.FxRobotContext
 
 /**
  * Mixin trait that defines the DSL of TestFX for being used in ScalaTest specficiations.
@@ -122,10 +120,10 @@ trait SfxRobotDsl {
   //---------------------------------------------------------------------------------------------
 
   def listWindows: Seq[Window] =
-    delegate.listWindows
+    delegate.listWindows.asScala
 
   def listTargetWindows: Seq[Window] =
-    delegate.listTargetWindows
+    delegate.listTargetWindows.asScala
 
   def window(predicate: (Window) => Boolean): Window =
     delegate.window(predicate)
@@ -153,7 +151,7 @@ trait SfxRobotDsl {
     delegate.fromAll
 
   def from(parentNodes: Node*): NodeQuery =
-    delegate.from(parentNodes)
+    delegate.from(parentNodes: _*)
 
   def from(nodeQuery: NodeQuery): NodeQuery =
     delegate.from(nodeQuery)

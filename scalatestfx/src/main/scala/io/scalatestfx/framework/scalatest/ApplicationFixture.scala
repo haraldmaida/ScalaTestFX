@@ -20,16 +20,16 @@ import org.scalatest.Outcome
 import org.scalatest.TestSuite
 import org.scalatest.TestSuiteMixin
 import org.testfx.api.FxToolkit
-import io.scalatestfx.api.ImplicitConversions._
+import io.scalatestfx.api.Java8Conversions._
 
 trait ApplicationFixture extends TestSuiteMixin { self: TestSuite =>
 
   def start(stage: Stage): Unit
 
   def init() {
-    FxToolkit.registerStage(() => {
+    FxToolkit.registerStage(asSupplier(() => {
       new Stage()
-    })
+    }))
   }
 
   def stop() {

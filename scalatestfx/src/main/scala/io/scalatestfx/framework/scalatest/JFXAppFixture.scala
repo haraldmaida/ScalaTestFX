@@ -16,23 +16,21 @@
 package io.scalatestfx.framework.scalatest
 
 import javafx.{stage => jfxst}
-import io.scalatestfx.api.Java8Conversions._
 import org.scalatest.Outcome
 import org.scalatest.TestSuite
 import org.scalatest.TestSuiteMixin
 import org.testfx.api.FxToolkit
-import scalafx.application.JFXApp.PrimaryStage
-import scalafx.application.JFXApp
 import scalafx.stage.Stage
+import io.scalatestfx.api.Java8Conversions._
 
 trait JFXAppFixture extends TestSuiteMixin { self: TestSuite =>
 
   def start(stage: Stage): Unit
 
   def init() {
-    FxToolkit.registerStage(() => {
+    FxToolkit.registerStage(asSupplier(() => {
       new jfxst.Stage()
-    })
+    }))
   }
 
   def stop(): Unit = {}

@@ -27,7 +27,6 @@ trait ImplicitConversions
 object JfxConversions extends JfxConversions
 
 trait JfxConversions {
-  import javafx.{geometry => jfxge}
   import javafx.{stage => jfxst}
   import javafx.{scene => jfxsc}
   import javafx.scene.{input => jfxin}
@@ -35,9 +34,7 @@ trait JfxConversions {
   import scalafx.scene.Node
   import scalafx.scene.input.KeyCode
   import scalafx.scene.input.MouseButton
-  import scalafx.scene.SceneIncludes._
   import scalafx.scene.input.InputIncludes._
-  import scala.collection.JavaConversions._
 
   implicit def asSfxWindowSeq(windowList: java.util.List[jfxst.Window]): Seq[Window] =
     windowList.map[Window, Seq[Window]] { window => window }

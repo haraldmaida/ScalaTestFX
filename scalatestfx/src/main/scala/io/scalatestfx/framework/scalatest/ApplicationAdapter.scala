@@ -15,9 +15,7 @@
  */
 package io.scalatestfx.framework.scalatest
 
-import java.util.function.Supplier
 import javafx.stage.Stage
-import org.testfx.api.FxToolkit
 
 class ApplicationAdapter(
     val applicationFixture: ApplicationFixture

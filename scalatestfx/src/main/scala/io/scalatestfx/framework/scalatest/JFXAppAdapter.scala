@@ -16,10 +16,8 @@
 package io.scalatestfx.framework.scalatest
 
 import javafx.{stage => jfxst}
-import io.scalatestfx.api.Java8Conversions._
 import org.testfx.api.FxToolkit
 import scalafx.application.JFXApp
-import scalafx.stage.Stage
 
 class JFXAppAdapter(
     val jfxAppFixture: JFXAppFixture
