@@ -1,25 +1,31 @@
-import java.net.URL
-import scala.xml._
+/*
+ * Copyright (c) 2016, Innoave.com
+ * All rights reserved.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL INNOAVE.COM OR ITS CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
+ * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 import sbtrelease._
 
 //
 // Environment variables used by the build:
-// JAR_BUILT_BY      - Name to be added to Jar metadata field "Built-By" (defaults to System.getProperty("user.name")
+// BUILT_BY      - Name to be added to Jar metadata field "Built-By" (defaults to System.getProperty("user.name")
 //
 
 name := "scalatestfx-build"
 
-val projectInfo = Seq(
-  organization := "io.scalatestfx",
-  homepage := Some(url("https://github.com/haraldmaida/ScalaTestFX")),
-  startYear := Some(2016),
-  licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
-)
+//
+// Project Modules
+//
 
-crossScalaVersions := Seq("2.11.8", "2.12.0-RC1")
-scalaVersion := crossScalaVersions.value.head
-
-// ScalaTestFX project
 lazy val scalatestfx = Project(
   id = "scalatestfx",
   base = file("scalatestfx"),
@@ -37,7 +43,6 @@ lazy val scalatestfx = Project(
   SiteScaladocPlugin
 )
 
-// ScalaTestFX Demos project
 lazy val scalatestfxDemos = Project(
   id = "scalatestfx-demos",
   base = file("scalatestfx-demos"),
@@ -53,90 +58,110 @@ lazy val scalatestfxDemos = Project(
       scalafx
     )
   )
-) dependsOn (scalatestfx % "compile;test->test")
+) dependsOn (
+  scalatestfx % "compile;test->test"
+)
 
 //
 // Dependencies
 //
-lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.0"
+lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.1"
 lazy val testfxCore = "org.testfx" % "testfx-core" % "4.0.4-alpha"
 lazy val scalafx = "org.scalafx" %% "scalafx" % "8.0.102-R11"
-
-//
-// Resolvers
-//
-lazy val sonatypeNexusSnapshots = "Sonatype Nexus Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
-lazy val sonatypeNexusStaging = "Sonatype Nexus Staging" at "https://oss.sonatype.org/service/local/staging/deploy/maven2"
-
-// Add snapshots to root project to enable compilation with Scala SNAPSHOT compiler,
-// e.g., 2.11.0-SNAPSHOT
-resolvers += sonatypeNexusSnapshots
-
-// Root project is never published
-publishArtifact := false
+//lazy val scalaJava8Compat = "org.scala-lang.modules" %% "scala-java8-compat" % "0.8.0"
 
 //
 // Plugins
 //
 enablePlugins(
-  GitBranchPrompt,
-  GitVersioning
+  GitBranchPrompt
 //  JekyllPlugin
 )
 
-// Common settings
-lazy val commonSettings = Seq(
-//  version := buildVersion,
-  scalacOptions ++= Seq("-unchecked", "-deprecation", "-Xcheckinit", "-encoding", "utf8", "-feature"),
-//  scalacOptions in(Compile, doc) ++= Opts.doc.title("ScalaTestFX API"),
-//  scalacOptions in(Compile, doc) ++= Opts.doc.version(buildVersion),
-//  scalacOptions in(Compile, doc) += s"-doc-external-doc:${scalaInstance.value.libraryJar}#http://www.scala-lang.org/api/${scalaVersion.value}/",
-//  scalacOptions in(Compile, doc) ++= Seq("-doc-footer", s"ScalaTestFX API v.$buildVersion"),
+commonSettings
+publishArtifact := false
+
+//
+// Common Settings
+//
+lazy val commonSettings = projectSettings ++ buildSettings
+
+//
+// Project Settings
+//
+
+lazy val projectSettings = Seq(
+  organization := "io.scalatestfx",
+  homepage := Some(url("https://github.com/haraldmaida/ScalaTestFX")),
+  startYear := Some(2016),
+  licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html")),
+  scmInfo := Some(ScmInfo(
+    url("https://github.com/haraldmaida/ScalaTestFX"),
+      "scm:git:git@github.com:haraldmaida/ScalaTestFX.git")
+  ),
+  git.remoteRepo := "git@github.com:haraldmaida/ScalaTestFX.git"
+)
+
+//
+// Build Settings
+//
+lazy val buildSettings = Seq(
+  crossScalaVersions := Seq("2.12.1", "2.11.10"),
+  scalaVersion := crossScalaVersions.value.head,
+  scalacOptions ++= Seq(
+    "-target:jvm-1.8",
+    "-encoding", "utf8",
+    "-unchecked",
+    "-deprecation",
+//    "-optimise",
+    "-feature",
+    "-language:_",
+    "-Xfatal-warnings",
+    "-Xlint:_",
+//    "-Yinline-warnings",      // seems to be not supported in 2.12
+    "-Ypartial-unification",
+    "-Yno-adapted-args",
+    "-Ywarn-dead-code",      // N.B. doesn't work well with the ??? hole
+    "-Ywarn-numeric-widen",
+    "-Ywarn-unused-import",    // 2.11+ only
+//    "-Ywarn-value-discard",
+    "-Ywarn-unused"
+  ),
   javacOptions ++= Seq(
     "-target", "1.8",
     "-source", "1.8",
-    "-Xlint:deprecation"
+    "-xlint:deprecation"
   ),
-  autoAPIMappings := true,
-  fork in Test := true,
-  parallelExecution in Test := false,
-  manifestSetting,
-  publishArtifact in Test := false,
-  git.remoteRepo := "git@github.com:haraldmaida/ScalaTestFX.git"
-) ++ mavenCentralSettings ++ bintraySettings
+  javaVersionPrefix in javaVersionCheck := Some("1.8"),
+  sourcesInBase := false,
+  parallelExecution := false,
+  resolvers ++= Seq(
+    Resolver.sonatypeRepo("snapshots"),
+    Resolver.bintrayRepo("haraldmaida", "maven")
+  ),
+  manifestSetting
+)
 
 lazy val manifestSetting = packageOptions += {
-    Package.ManifestAttributes(
-      "Created-By" -> "Simple Build Tool",
-      "Built-By" -> Option(System.getenv("JAR_BUILT_BY")).getOrElse(System.getProperty("user.name")),
-      "Build-Jdk" -> System.getProperty("java.version"),
-      "Specification-Title" -> name.value,
-      "Specification-Version" -> version.value,
-      "Specification-Vendor" -> organization.value,
-      "Implementation-Title" -> name.value,
-      "Implementation-Version" -> version.value,
-      "Implementation-Vendor-Id" -> organization.value,
-      "Implementation-Vendor" -> organization.value
-    )
+  Package.ManifestAttributes(
+    "Created-By" -> "Simple Build Tool",
+    "Built-By" -> Option(System.getenv("BUILT_BY")).getOrElse(System.getProperty("user.name")),
+    "Build-Jdk" -> System.getProperty("java.version"),
+    "Specification-Title" -> name.value,
+    "Specification-Version" -> version.value,
+    "Specification-Vendor" -> organization.value,
+    "Implementation-Title" -> name.value,
+    "Implementation-Version" -> version.value,
+    "Implementation-Vendor-Id" -> organization.value,
+    "Implementation-Vendor" -> organization.value
+  )
 }
-
-//
-// Git Versioning
-//
-git.baseVersion := "0.0.0"
-val VersionTagRegex = "^v([0-9]+.[0-9]+.[0-9]+)(-.*)?$".r
-git.gitTagToVersionNumber := {
-  case VersionTagRegex(v,"") => Some(v)
-  case VersionTagRegex(v,s) => Some(s"$v$s")  
-  case _ => None
-}
-git.useGitDescribe := true
 
 //
 // Release Process
 //
 releaseCrossBuild := true
-releaseProcess := ReleaseProcess.steps 
+//releaseProcess := ReleaseProcess.steps
 releasePublishArtifactsAction := PgpKeys.publishSigned.value
 // use next version instead of current developer version
 releaseVersion := {
@@ -152,25 +177,22 @@ lazy val bintraySettings = Seq(
   bintrayOrganization in bintray := None
 )
 
-// Metadata needed by Maven Central
-// See also http://maven.apache.org/pom.html#Developers
-lazy val mavenCentralSettings = projectInfo ++ Seq(
-  pomExtra := {
-    pomExtra.value ++ Group(
-      <scm>
-        <url>https://github.com/haraldmaida/ScalaTestFX</url>
-        <connection>scm:git:https://github.com/haraldmaida/ScalaTestFX.git</connection>
-      </scm>
-      <developers>
-        <developer>
-          <id>haraldmaida</id>
-          <name>Harald Maida</name>
-          <url>https://github.com/haraldmaida</url>
-        </developer>
-      </developers>
+lazy val publishSettings = bintraySettings ++ Seq(
+  publishArtifact := true,
+  publishArtifact in Test := false,
+  // Metadata needed by Maven Central
+  // See also http://maven.apache.org/pom.html#Developers
+  pomExtra := (
+    <developers>
+      <developer>
+        <id>haraldmaida</id>
+        <name>Harald Maida</name>
+        <url>https://github.com/haraldmaida</url>
+      </developer>
+    </developers>
     )
-  }
 )
+
 //
 // Project website
 //
