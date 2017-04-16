@@ -66,7 +66,7 @@ lazy val scalatestfxDemos = Project(
 // Dependencies
 //
 lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.1"
-lazy val testfxCore = "org.testfx" % "testfx-core" % "4.0.4-alpha"
+lazy val testfxCore = "org.testfx" % "testfx-core" % "4.0.6-alpha"
 lazy val scalafx = "org.scalafx" %% "scalafx" % "8.0.102-R11"
 //lazy val scalaJava8Compat = "org.scala-lang.modules" %% "scala-java8-compat" % "0.8.0"
 
@@ -97,8 +97,8 @@ lazy val projectSettings = Seq(
   licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html")),
   scmInfo := Some(ScmInfo(
     url("https://github.com/haraldmaida/ScalaTestFX"),
-      "scm:git:git@github.com:haraldmaida/ScalaTestFX.git")
-  ),
+      "scm:git:git@github.com:haraldmaida/ScalaTestFX.git"
+  )),
   git.remoteRepo := "git@github.com:haraldmaida/ScalaTestFX.git"
 )
 
