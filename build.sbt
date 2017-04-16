@@ -32,7 +32,6 @@ lazy val scalatestfx = Project(
   settings = commonSettings ++ ghpages.settings ++ Seq(
     description := "The ScalaTestFX Framework",
     publishArtifact := true,
-    fork in run := true,
     libraryDependencies ++= Seq(
       scalatest,
       testfxCore,
@@ -49,7 +48,6 @@ lazy val scalatestfxDemos = Project(
   settings = commonSettings ++ Seq(
     description := "The ScalaTestFX Demonstrations",
     publishArtifact := false,
-    fork in run := true,
     javaOptions ++= Seq(
       "-Xmx512M",
       "-Djavafx.verbose"
@@ -135,6 +133,7 @@ lazy val buildSettings = Seq(
   javaVersionPrefix in javaVersionCheck := Some("1.8"),
   sourcesInBase := false,
   parallelExecution := false,
+  fork := true,
   resolvers ++= Seq(
     Resolver.sonatypeRepo("snapshots"),
     Resolver.bintrayRepo("haraldmaida", "maven")
