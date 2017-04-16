@@ -163,9 +163,9 @@ releaseCrossBuild := true
 //releaseProcess := ReleaseProcess.steps
 releasePublishArtifactsAction := PgpKeys.publishSigned.value
 // use next version instead of current developer version
-releaseVersion := {
-    ver => Version(ver).map(_.withoutQualifier).map(_.bump(releaseVersionBump.value).string).getOrElse(versionFormatError)
-}
+// releaseVersion := {
+//     ver => Version(ver).map(_.withoutQualifier).map(_.bump(releaseVersionBump.value).string).getOrElse(versionFormatError)
+// }
 
 //
 // Publishing
