@@ -177,7 +177,6 @@ lazy val bintraySettings = Seq(
 )
 
 lazy val publishSettings = bintraySettings ++ Seq(
-  publishArtifact := true,
   publishArtifact in Test := false,
   // Metadata needed by Maven Central
   // See also http://maven.apache.org/pom.html#Developers
